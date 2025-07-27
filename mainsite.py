@@ -241,9 +241,14 @@ def main():
             )
 
         st.divider()
-        # Módosított kód:
+        
+        current_rounds = get_query_param("rounds")
+        if current_rounds == "_":
+            current_rounds = 1
+        else:
+            current_rounds = int(current_rounds)
             
-        st.session_state.rounds = st.number_input("Körök száma", min_value=1, max_value=10, step=1)
+        st.session_state.rounds = st.number_input("Körök száma", min_value=1, max_value=10, step=1, value=current_rounds)
         st.session_state.rounds_current = 1
 
         mellette_vagy_ellene = get_query_param("side")
