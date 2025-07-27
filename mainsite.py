@@ -131,7 +131,9 @@ def game_logic():
     # else:
     #     st.markdown(f" ### Reagáljatok! ")
 
-    st.markdown(f" #### Érveljetek  {hogyan}! ")    
+    st.markdown(f" #### Érveljetek  {hogyan}! ")
+
+    st.divider()    
     c1, c2 = st.columns(2)
 
     with c1:
