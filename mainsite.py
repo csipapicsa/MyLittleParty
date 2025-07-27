@@ -28,23 +28,23 @@ def game_logic():
     # st.table(card)
     side = get_query_param('side')
 
-    if card["Típus - HUN"] == "Kampány":
-        mode = "erveles"
-    else:
-        mode = "reagalas"
+    # if card["Típus - HUN"] == "Kampány":
+    #     mode = "erveles"
+    # else:
+    #     mode = "reagalas"
 
-    if side == "Mellette" and mode == "erveles":
+    if side == "Mellette":
         jobbos_bonus = card['Jobbos bonus']
         balos_bonus = card['Balos Bonus']
         hogyan = "mellette"
-    elif side == "Ellene" and mode == "erveles":
+    elif side == "Ellene":
         jobbos_bonus = card['Balos Bonus']
         balos_bonus = card['Jobbos bonus']
         hogyan = "ellene"
-    elif mode == "reagalas":
-        # TODO 
-        jobbos_bonus = card['Jobbos bonus']
-        balos_bonus = card['Balos Bonus']
+    # elif mode == "reagalas":
+    #     # TODO 
+    #     jobbos_bonus = card['Jobbos bonus']
+    #     balos_bonus = card['Balos Bonus']
         # hogyan = "reagáljatok a kártyára"
 
 
@@ -59,10 +59,12 @@ def game_logic():
     
     st.divider()
 
-    if mode == "erveles":
-        st.markdown(f" ### Érveljetek  {hogyan}! ")
-    else:
-        st.markdown(f" ### Reagáljatok! ")
+    # if mode == "erveles":
+    #     st.markdown(f" ### Érveljetek  {hogyan}! ")
+    # else:
+    #     st.markdown(f" ### Reagáljatok! ")
+
+    st.markdown(f" ### Érveljetek  {hogyan}! ")    
     c1, c2 = st.columns(2)
 
     with c1:
@@ -75,7 +77,7 @@ def game_logic():
 
     c1, c2 = st.columns(2)
 
-
+    round_key_suffix = f"_round_{st.session_state.rounds_current}"
     if st.session_state.player_1_view == "Balos":
         with c1:
             szavazatok_player_1 = st.number_input(
@@ -83,7 +85,7 @@ def game_logic():
                 min_value=0,
                 max_value=5,
                 value=0,
-                key="player_1_votes"
+                key=f"player_1_votes{round_key_suffix}"
             )
         with c2:
             szavazatok_player_2 = st.number_input(
@@ -91,7 +93,7 @@ def game_logic():
                 min_value=0,
                 max_value=5,
                 value=0,
-                key="player_2_votes"
+                key=f"player_2_votes{round_key_suffix}"
             )
     else:
         with c1:
@@ -100,7 +102,7 @@ def game_logic():
                 min_value=0,
                 max_value=5,
                 value=0,
-                key="player_2_votes"
+                key=f"player_2_votes{round_key_suffix}"
             )
         with c2:
             szavazatok_player_1 = st.number_input(
@@ -108,7 +110,7 @@ def game_logic():
                 min_value=0,
                 max_value=5,
                 value=0,
-                key="player_1_votes"
+                key=f"player_1_votes{round_key_suffix}"
             )
 
 
@@ -152,6 +154,10 @@ def game_logic():
         set_query_param("player_1_points", int(_current_player_1_points) + int(_temp_pont_1))
         set_query_param("player_2_points", int(_current_player_2_points) + int(_temp_pont_2))
         del st.session_state.current_card
+        
+        vote_keys_to_delete = [key for key in st.session_state.keys() if key.startswith(('player_1_votes', 'player_2_votes'))]
+        for key in vote_keys_to_delete:
+            del st.session_state[key]
         # st.info("Még nem vagyunk itt")
         # st.info(st.session_state.rounds_current)
         # st.info(st.session_state.rounds)
