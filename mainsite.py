@@ -52,23 +52,23 @@ def game_logic():
 
     st.session_state.rounds = int(get_query_param("rounds"))
 
-    st.markdown(f"## Kör {st.session_state.rounds_current} / {st.session_state.rounds}")
+    st.markdown(f"### Kör {st.session_state.rounds_current} / {st.session_state.rounds}")
 
-    st.markdown(f"## **Téma:** *{card['Kártya leírás HUN']}*")
-    st.markdown(f"## **Típus:** *{card['Típus - HUN']}*")
+    st.markdown(f"### **Téma:** *{card['Kártya leírás HUN']}*")
+    st.markdown(f"### **Típus:** *{card['Típus - HUN']}*")
     
     st.divider()
 
     if mode == "erveles":
-        st.markdown(f" ## Érveljetek  {hogyan}! ")
+        st.markdown(f" ### Érveljetek  {hogyan}! ")
     else:
-        st.markdown(f" ## Reagáljatok! ")
+        st.markdown(f" ### Reagáljatok! ")
     c1, c2 = st.columns(2)
 
     with c1:
-        st.markdown(f"## **Balos szavazati bonus:** \n\n ## {balos_bonus} x")
+        st.markdown(f"### **Balos szavazati bonus:** \n\n ### {balos_bonus} x")
     with c2:
-        st.markdown(f"## **Jobbos szavazati bonus:** \n\n ## {jobbos_bonus} x")
+        st.markdown(f"### **Jobbos szavazati bonus:** \n\n ### {jobbos_bonus} x")
 
     st.divider()
 
