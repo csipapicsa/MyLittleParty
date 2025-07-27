@@ -36,6 +36,11 @@ def game_logic():
     if "current_card" not in st.session_state:
         st.session_state.current_card = st.session_state.cards.sample().iloc[0]
         scroll_to_top()
+        st.components.v1.html("""
+            <script>
+                window.parent.scrollTo(0, 0);
+            </script>
+        """, height=0)
 
     card = st.session_state.current_card
     # st.table(card)
@@ -65,10 +70,10 @@ def game_logic():
 
     st.session_state.rounds = int(get_query_param("rounds"))
 
-    st.markdown(f"### Kör {st.session_state.rounds_current} / {st.session_state.rounds}")
+    st.markdown(f"#### Kör {st.session_state.rounds_current} / {st.session_state.rounds}")
 
-    st.markdown(f"### **Téma:** *{card['Kártya leírás HUN']}*")
-    st.markdown(f"### **Típus:** *{card['Típus - HUN']}*")
+    st.markdown(f"#### **Téma:** *{card['Kártya leírás HUN']}*")
+    st.markdown(f"#### **Típus:** *{card['Típus - HUN']}*")
     
     st.divider()
 
@@ -77,13 +82,13 @@ def game_logic():
     # else:
     #     st.markdown(f" ### Reagáljatok! ")
 
-    st.markdown(f" ### Érveljetek  {hogyan}! ")    
+    st.markdown(f" #### Érveljetek  {hogyan}! ")    
     c1, c2 = st.columns(2)
 
     with c1:
-        st.markdown(f"### **Balos szavazati bonus:** \n\n ### {balos_bonus} x")
+        st.markdown(f"#### **Balos szavazati bonus:** \n\n ### {balos_bonus} x")
     with c2:
-        st.markdown(f"### **Jobbos szavazati bonus:** \n\n ### {jobbos_bonus} x")
+        st.markdown(f"#### **Jobbos szavazati bonus:** \n\n ### {jobbos_bonus} x")
 
     st.divider()
 
@@ -94,7 +99,7 @@ def game_logic():
     if st.session_state.player_1_view == "Balos":
         with c1:
             szavazatok_player_1 = st.number_input(
-                f"## {st.session_state.player_1_name} szavazatai",
+                f"#### {st.session_state.player_1_name} szavazatai",
                 min_value=0,
                 max_value=5,
                 value=0,
@@ -102,7 +107,7 @@ def game_logic():
             )
         with c2:
             szavazatok_player_2 = st.number_input(
-                f"## {st.session_state.player_2_name} szavazatai",
+                f"#### {st.session_state.player_2_name} szavazatai",
                 min_value=0,
                 max_value=5,
                 value=0,
@@ -111,7 +116,7 @@ def game_logic():
     else:
         with c1:
             szavazatok_player_2 = st.number_input(
-                f"## {st.session_state.player_2_name} szavazatai",
+                f"#### {st.session_state.player_2_name} szavazatai",
                 min_value=0,
                 max_value=5,
                 value=0,
@@ -119,7 +124,7 @@ def game_logic():
             )
         with c2:
             szavazatok_player_1 = st.number_input(
-                f"## {st.session_state.player_1_name} szavazatai",
+                f"#### {st.session_state.player_1_name} szavazatai",
                 min_value=0,
                 max_value=5,
                 value=0,
@@ -129,7 +134,7 @@ def game_logic():
 
     st.divider()
 
-    st.markdown("## **Játékosok pontjai**")
+    st.markdown("#### **Játékosok pontjai**")
 
     pontok_container = st.container()
 
@@ -139,23 +144,23 @@ def game_logic():
             with c1:
                 _player_1_name = get_query_param("player_1_name")
                 _player_1_points = get_query_param("player_1_points")
-                st.markdown(f"### **{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
+                st.markdown(f"#### **{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
 
             with c2:
                 _player_2_name = get_query_param("player_2_name")
                 _player_2_points = get_query_param("player_2_points")
-                st.markdown(f"### **{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
+                st.markdown(f"#### **{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
 
         else:
             with c1:
                 _player_2_name = get_query_param("player_2_name")
                 _player_2_points = get_query_param("player_2_points")
-                st.markdown(f"### **{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
+                st.markdown(f"#### **{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
 
             with c2:
                 _player_1_name = get_query_param("player_1_name")
                 _player_1_points = get_query_param("player_1_points")
-                st.markdown(f"### **{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
+                st.markdown(f"#### **{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
 
     # st.balloons()
 
@@ -188,8 +193,8 @@ def game_logic():
                 st.success("Döntetlen!")
             st.balloons()
             # végső pontok kiírása
-            st.markdown(f"### **{st.session_state.player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
-            st.markdown(f"### **{st.session_state.player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
+            st.markdown(f"## **{st.session_state.player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
+            st.markdown(f"## **{st.session_state.player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
             
             import time
             time.sleep(10)
@@ -301,6 +306,10 @@ def main():
         if st.button("Játék indítása"):
             set_query_param("page", "game")
             st.session_state._init_game = True
+            try:
+                del st.session_state.current_card
+            except:
+                pass
             st.rerun()
 
     elif new_page == "game":
