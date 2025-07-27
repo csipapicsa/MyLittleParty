@@ -18,11 +18,24 @@ A játék indítása:
 - Az győz, aki a legtöbb szavazatot kapta az adott játékban.
 """
 
+import streamlit.components.v1 as components
+def scroll_to_top():
+    """Függvény az oldal tetejére való ugráshoz"""
+    components.html("""
+        <script>
+            window.parent.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        </script>
+    """, height=0)
+
 @st.fragment
 def game_logic():
 
     if "current_card" not in st.session_state:
         st.session_state.current_card = st.session_state.cards.sample().iloc[0]
+        scroll_to_top()
 
     card = st.session_state.current_card
     # st.table(card)
