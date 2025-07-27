@@ -48,15 +48,8 @@ Gyűjtsd a legtöbb szavazatot érveid meggyőző erejével! Aki a legtöbb pont
 ### 🃏 A kártyák
 
 - Minden kártya egy politikai kampánytémát tartalmaz.
-- A kártyákhoz pontszorzók is tartoznak, amelyek attól függően változnak, hogy melyik oldal számára előnyös a téma, illetve milyen az adott beállítás ("mellette" / "ellene") a játék során.  
-  Például: egy balos számára egy balos téma mellett érvelni nem jár szorzóval, de ha ugyanazt téma mellett jobboldaliként érvelsz meggyőzően, bónuszpontot kapsz. Fordítva is igaz: jobboldaliként jobbos téma ellen is szorzóval juthatsz pontokhoz.
-
-### 🃏 A kártyák
-
-- Minden kártya egy politikai kampánytémát tartalmaz.
 - A kártyákhoz pontszorzók is tartoznak, attól függően, hogy melyik oldal számára előnyös a téma, illetve hogy a játékos épp mellette vagy ellene érvel.  
-  Például: egy baloldali játékos számára egy balos téma melletti érvelés nem jár szorzóval, de ha ugyanezt a témát egy jobboldali játékos védi meg meggyőzően, vagy érvel meleltte, bónuszpontot kap. Ugyanez fordítva is igaz: jobboldaliként egy jobbos téma ellen érvelve is szorzót kaphatsz, ha így is képes vagy szavazatokat szerezni.
-
+  Például: egy baloldali nézőpontú játékos számára egy balos téma melletti érvelés nem jár szorzóval, de ha ugyanezen a téma mellett egy jobboldali játékos érvel meggyőzően, bónuszszorzót kap. Ugyanez fordítva is igaz: jobboldali nézőpontból egy jobbos téma ellen érvelve is szorzót kaphatsz, ha így is képes vagy szavazatokat szerezni.
 
 ---
 
