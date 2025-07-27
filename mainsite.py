@@ -3,20 +3,100 @@ import streamlit as st
 from functions import get_query_param, set_query_param, read_in_cards, show_all_cards
 
 szabaly = """
+
+2 + játékosra tervezett társasjáték, amely a politikai nézetek és érvek köré épül.
+
 # Szabályok
+## Leírás
+Választások előtti kampány időszak van, és neked, mint pártelnöknek meg kell győznöd, hogy rád szavazzanak. Különböző kampány témákra kell reagálnod az ellenfeleddel, és érvelned a téma mellett vagy ellen, néha annak dacára, hogy az adott téma nem a te politikai nézetedet képviseli. A játék során a politikai vezetők kártyákat húznak, amelyek különböző politikai témákat és álláspontokat tartalmaznak. A játékosoknak meg kell győzni a választókat az saját szempontjaik alapján.
+
+## Játékosok száma [?]
 A játék célja, hogy a játékosok minél jobban tudjanak egy-egy téma mellett érvelni, jobbos vagy balos politikus nézetet képviselve. A játék során a játékosok kártyákat húznak, amelyek különböző politikai témákat és álláspontokat tartalmaznak. A játékosoknak meg kell próbálniuk meggyőzni a népet az általuk képviselt nézet helyességéről.
 
 A kártyákra olya módon kell reagálni, hogy pártálástól függően mindig mellette vagy ellenne kell érvelni. Például ha egy játékos baloldali nézeteket képvisel, és egy jobboldal számra kedves kártyát húz, majd érvelésével szavazatokat nyer, akkor rendzserint bizonyos szorzóval kap pontot.
 
-A játék indítása:
-- Döntsétek el, hogy minden körben mindenki mellette vagy ellene érvel az adott témának. Az összes körben ezt kell tartani.
-- Döntsétek el hány kört szeretnétek játszani.
+## A játék menete:
+- Találjatok két embert, akik közül az egyik jobbos, a másik balos politikai nézeteket képvisel.
+- Döntsétek el, hogy hány kampány témát akartok kapni a játék során.
+- Döntsétek el, hogy mellette vagy ellene érvel az adott témának az adott játékban (tehát minden körben). Az összes körben ezt kell tartani.  
 - Minden körben húztok egy kártyát.
-- Mindkét játékosnak el kell mondania az érvet, lehetőleg pár mondatban. 
+- Mindkét játékosnak el kell mondania az érvet és/vagy meg kell győznie a választókat, lehetőleg pár mondatban. 
 - A játékosok szavaznak, hogy kinek volt jobb érve.
 - Írjátok be, melyik játékos hány szavazatot kapott. Aki a 'nép' pozícióban van, az írja be a szavazatokat, és egy körben csak egyet lehet szavazni
 - Az győz, aki a legtöbb szavazatot kapta az adott játékban.
+
 """
+
+szabaly = """
+### 🎲 Az én kicsi pártom – Játékszabályok
+
+**Leírás**  
+Ez egy minimum három fővel játszható, tervezés alatt álló kártyajáték online verziója, amely a politikai nézetek és érvek játékos ütköztetésére épül. A játék során egy képzeletbeli jobbos vagy balos párt politikusának bőrébe bújva kampánytémákat húztok, és azok mellett vagy ellen kell érvelnetek – néha még a saját vagy választott politikai meggyőződésetekkel szembemenve is.
+
+**Cél**  
+Gyűjtsd a legtöbb szavazatot érveid meggyőző erejével! Aki a legtöbb pontot szerzi a játék végére, megnyeri a választásokat.
+
+---
+
+### 👥 Játékosok
+
+- A játékhoz minimum három játékos szükséges.
+- Az egyik játékos **baloldali**, a másik **jobboldali** nézetet képvisel. A többiek a szavazók szerepét töltik be.
+
+---
+
+### 🃏 A kártyák
+
+- Minden kártya egy politikai kampánytémát tartalmaz.
+- A kártyákhoz pontszorzók is tartoznak, amelyek attól függően változnak, hogy melyik oldal számára előnyös a téma, illetve milyen az adott beállítás ("mellette" / "ellene") a játék során.  
+  Például: egy balos számára egy balos téma mellett érvelni nem jár szorzóval, de ha ugyanazt téma mellett jobboldaliként érvelsz meggyőzően, bónuszpontot kapsz. Fordítva is igaz: jobboldaliként jobbos téma ellen is szorzóval juthatsz pontokhoz.
+
+### 🃏 A kártyák
+
+- Minden kártya egy politikai kampánytémát tartalmaz.
+- A kártyákhoz pontszorzók is tartoznak, attól függően, hogy melyik oldal számára előnyös a téma, illetve hogy a játékos épp mellette vagy ellene érvel.  
+  Például: egy baloldali játékos számára egy balos téma melletti érvelés nem jár szorzóval, de ha ugyanezt a témát egy jobboldali játékos védi meg meggyőzően, vagy érvel meleltte, bónuszpontot kap. Ugyanez fordítva is igaz: jobboldaliként egy jobbos téma ellen érvelve is szorzót kaphatsz, ha így is képes vagy szavazatokat szerezni.
+
+
+---
+
+### 🔁 A játék menete
+
+1. **Beállítások:**
+   - Állítsátok be a játékosok neveit és nézeteit (balos vagy jobbos).
+   - Döntsétek el, hány kört játszotok (1–10).
+   - Válasszátok ki, hogy minden körben a játékosok **a téma mellett vagy ellene érvelnek**. Ez végig ugyanaz marad.
+
+2. **Körök:**
+   - Minden kör elején a játék húz egy kampánykártyát.
+   - Mindkét játékos röviden érvel szóban a játék beállítása szerint (mellette vagy ellene).
+   - A választók szavaznak: mindenki 1 szavazatot adhat le.
+   - A szavazatokból pontok keletkeznek az adott kártyán szereplő szorzók alapján.
+
+3. **Pontozás:**
+   - A játék automatikusan kiszámolja a pontokat.
+   - A pontok körönként összeadódnak.
+
+---
+
+### 🏆 A játék vége
+
+- Az utolsó kör után a játék automatikusan kiírja a nyertest.
+- A győztes az, aki a legtöbb pontot szerezte.
+
+
+### A szerő üzenete
+
+- A pontozás súlyozása és a kártyák tartalma feltöltés alatt áll, és a játék folyamatosan fejlődik. Szóval szinte biztos, hogy a játék során találkozni fogtok hibákkal, vagy olyan kártyákkal, amelyek teljesen nem illenek a jétákba. 
+
+###### Ötleted vagy visszajelzésed van?  
+Írd meg a [GitHub-oldalon](https://github.com/csipapicsa/MyLittleParty/discussions), a [Discord szerveren](https://discord.gg/AtnQJ6YcYA), vagy küldd el e-mailben: **gergo pont gyori[kukac]gmail.com**
+
+---
+"""
+
+
+
 
 import streamlit.components.v1 as components
 def scroll_to_top():
