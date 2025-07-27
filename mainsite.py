@@ -212,7 +212,7 @@ def game_logic():
 
 
 def main():
-    st.title("Az én kicsi pártom kártyajáték - teszt oldal")
+    st.markdown("#### Az én kicsi pártom kártyajáték - teszt oldal")
 
     tab_names = ["Szabályok", "Beállítások", "Játék", "Kártya ötletek"]
     tab_keys = ["szabaly", "settings", "game", "card_ideas"]
@@ -243,7 +243,7 @@ def main():
     if new_page == "szabaly":
         st.markdown(szabaly)
     elif new_page == "settings":
-        st.markdown("## Beállítások")
+        st.markdown("#### Beállítások")
         options = ["Balos", "Jobbos"]
 
         cm1, cm2 = st.columns(2)
