@@ -3,31 +3,6 @@ import streamlit as st
 from functions import get_query_param, set_query_param, read_in_cards, show_all_cards
 
 szabaly = """
-
-2 + játékosra tervezett társasjáték, amely a politikai nézetek és érvek köré épül.
-
-# Szabályok
-## Leírás
-Választások előtti kampány időszak van, és neked, mint pártelnöknek meg kell győznöd, hogy rád szavazzanak. Különböző kampány témákra kell reagálnod az ellenfeleddel, és érvelned a téma mellett vagy ellen, néha annak dacára, hogy az adott téma nem a te politikai nézetedet képviseli. A játék során a politikai vezetők kártyákat húznak, amelyek különböző politikai témákat és álláspontokat tartalmaznak. A játékosoknak meg kell győzni a választókat az saját szempontjaik alapján.
-
-## Játékosok száma [?]
-A játék célja, hogy a játékosok minél jobban tudjanak egy-egy téma mellett érvelni, jobbos vagy balos politikus nézetet képviselve. A játék során a játékosok kártyákat húznak, amelyek különböző politikai témákat és álláspontokat tartalmaznak. A játékosoknak meg kell próbálniuk meggyőzni a népet az általuk képviselt nézet helyességéről.
-
-A kártyákra olya módon kell reagálni, hogy pártálástól függően mindig mellette vagy ellenne kell érvelni. Például ha egy játékos baloldali nézeteket képvisel, és egy jobboldal számra kedves kártyát húz, majd érvelésével szavazatokat nyer, akkor rendzserint bizonyos szorzóval kap pontot.
-
-## A játék menete:
-- Találjatok két embert, akik közül az egyik jobbos, a másik balos politikai nézeteket képvisel.
-- Döntsétek el, hogy hány kampány témát akartok kapni a játék során.
-- Döntsétek el, hogy mellette vagy ellene érvel az adott témának az adott játékban (tehát minden körben). Az összes körben ezt kell tartani.  
-- Minden körben húztok egy kártyát.
-- Mindkét játékosnak el kell mondania az érvet és/vagy meg kell győznie a választókat, lehetőleg pár mondatban. 
-- A játékosok szavaznak, hogy kinek volt jobb érve.
-- Írjátok be, melyik játékos hány szavazatot kapott. Aki a 'nép' pozícióban van, az írja be a szavazatokat, és egy körben csak egyet lehet szavazni
-- Az győz, aki a legtöbb szavazatot kapta az adott játékban.
-
-"""
-
-szabaly = """
 ### 🎲 Az én kicsi pártom – Játékszabályok
 
 **Leírás**  
@@ -41,7 +16,8 @@ Gyűjtsd a legtöbb szavazatot érveid meggyőző erejével! Aki a legtöbb pont
 ### 👥 Játékosok
 
 - A játékhoz minimum három játékos szükséges.
-- Az egyik játékos **baloldali**, a másik **jobboldali** nézetet képvisel. A többiek a szavazók szerepét töltik be.
+- Az egyik játékos **baloldali**, a másik **jobboldali** nézetet képvisel. A többiek a szavazók szerepét töltik be. - 💡 *Tipp:* Akkor a legszórakoztatóbb, ha a saját meggyőződéseddel **ellentétes** oldalt választasz.
+
 
 ---
 
