@@ -2,6 +2,30 @@ import streamlit as st
 
 from functions import get_query_param, set_query_param, read_in_cards, show_all_cards
 
+st.set_page_config(
+    page_title="Az én kicsi pártom",
+    page_icon="🗳️",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        "Get help": "https://www.facebook.com/mounitarsasjatek",
+        "Report a bug": "https://discord.gg/AtnQJ6YcYA",
+        "About": """
+### 🎲 Az én kicsi pártom
+
+Egy szatirikus politikai társasjáték, ahol kampánytémák mentén kell érvelned – akár a saját nézeteiddel szembemenve is.
+
+###### Ötleted vagy visszajelzésed van?  
+Írd meg a [GitHub-oldalon](https://github.com/csipapicsa/MyLittleParty/discussions),  
+a [Discord szerveren](https://discord.gg/AtnQJ6YcYA),  
+vagy küldd el e-mailben: **gergo.pont.gyori.pont.project[kukac]gmail.com**
+        """
+    }
+)
+
+
+
+
 szabaly = """
 ### 🎲 Az én kicsi pártom – Játékszabályok
 
@@ -59,7 +83,7 @@ Gyűjtsd a legtöbb szavazatot érveid meggyőző erejével! Aki a legtöbb pont
 - A pontozás súlyozása és a kártyák tartalma feltöltés alatt áll, és a játék folyamatosan fejlődik. Szóval szinte biztos, hogy a játék során találkozni fogtok hibákkal, vagy olyan kártyákkal, amelyek teljesen nem illenek a játékba. 
 
 ###### Ötleted vagy visszajelzésed van?  
-Írd meg a [GitHub-oldalon](https://github.com/csipapicsa/MyLittleParty/discussions), a [Discord szerveren](https://discord.gg/AtnQJ6YcYA), vagy küldd el e-mailben: **gergo pont gyori[kukac]gmail.com**
+Írd meg a [GitHub-oldalon](https://github.com/csipapicsa/MyLittleParty/discussions), a [Discord szerveren](https://discord.gg/AtnQJ6YcYA), vagy küldd el e-mailben: **gergo pont gyori pont project[kukac]gmail.com**
 
 ---
 """
