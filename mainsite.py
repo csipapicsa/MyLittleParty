@@ -56,7 +56,7 @@ Gyűjtsd a legtöbb szavazatot érveid meggyőző erejével! Aki a legtöbb pont
 
 ### A szerő üzenete
 
-- A pontozás súlyozása és a kártyák tartalma feltöltés alatt áll, és a játék folyamatosan fejlődik. Szóval szinte biztos, hogy a játék során találkozni fogtok hibákkal, vagy olyan kártyákkal, amelyek teljesen nem illenek a jétákba. 
+- A pontozás súlyozása és a kártyák tartalma feltöltés alatt áll, és a játék folyamatosan fejlődik. Szóval szinte biztos, hogy a játék során találkozni fogtok hibákkal, vagy olyan kártyákkal, amelyek teljesen nem illenek a játékba. 
 
 ###### Ötleted vagy visszajelzésed van?  
 Írd meg a [GitHub-oldalon](https://github.com/csipapicsa/MyLittleParty/discussions), a [Discord szerveren](https://discord.gg/AtnQJ6YcYA), vagy küldd el e-mailben: **gergo pont gyori[kukac]gmail.com**
@@ -79,11 +79,43 @@ def scroll_to_top():
         </script>
     """, height=0)
 
+def get_a_card(debug=False, print_info=False):
+    """Véletlenszerű kártya kiválasztása a kártyák közül"""
+    if "cards" not in st.session_state:
+        st.session_state.cards = read_in_cards()
+
+    # Csak egyszer vágjuk le a 10-es szeletet debug módban
+    if debug and "debug_filtered" not in st.session_state:
+        st.session_state.cards = st.session_state.cards.iloc[10:20].copy()
+        st.session_state.debug_filtered = True  # Ne vágjuk újra minden híváskor
+
+    if len(st.session_state.cards) == 0:
+        st.warning("Elfogytak a kártyák!")
+        return None
+
+    # get a random card, and remove it from the deck
+    card = st.session_state.cards.sample(1).iloc[0]
+    print(f"Kiválasztott kártya: {card['Kártya leírás HUN']}")
+    st.session_state.cards = st.session_state.cards.drop(card.name)
+
+    if debug:
+        st.info("----")
+        st.info(f"**Kiválasztott kártya:** `{card['Kártya leírás HUN']}`")
+        st.info(f"**Maradék kártyák száma:** {len(st.session_state.cards)}")
+        st.info(f"Maradék kártyák: {', '.join(st.session_state.cards['Kártya leírás HUN'].tolist())}")
+        st.info("----")
+
+    if print_info:
+        st.info(f"Maradék kártyák száma: {len(st.session_state.cards)}")
+
+    return card
+
+
 @st.fragment
 def game_logic():
 
     if "current_card" not in st.session_state:
-        st.session_state.current_card = st.session_state.cards.sample().iloc[0]
+        # st.session_state.current_card = st.session_state.cards.sample().iloc[0]
         scroll_to_top()
         st.components.v1.html("""
             <script>
@@ -91,7 +123,7 @@ def game_logic():
             </script>
         """, height=0)
 
-    card = st.session_state.current_card
+        st.session_state.current_card = get_a_card(debug=False, print_info=True)
     # st.table(card)
     side = get_query_param('side')
 
@@ -101,12 +133,12 @@ def game_logic():
     #     mode = "reagalas"
 
     if side == "Mellette":
-        jobbos_bonus = card['Jobbos bonus']
-        balos_bonus = card['Balos Bonus']
+        jobbos_bonus = st.session_state.current_card['Jobbos bonus']
+        balos_bonus = st.session_state.current_card['Balos Bonus']
         hogyan = "mellette"
     elif side == "Ellene":
-        jobbos_bonus = card['Balos Bonus']
-        balos_bonus = card['Jobbos bonus']
+        jobbos_bonus = st.session_state.current_card['Balos Bonus']
+        balos_bonus = st.session_state.current_card['Jobbos bonus']
         hogyan = "ellene"
     # elif mode == "reagalas":
     #     # TODO 
@@ -121,7 +153,7 @@ def game_logic():
 
     st.markdown(f"#### Kör {st.session_state.rounds_current} / {st.session_state.rounds}")
 
-    st.markdown(f"#### **Téma:** *{card['Kártya leírás HUN']}*")
+    st.markdown(f"#### **Téma:** *{st.session_state.current_card['Kártya leírás HUN']}*")
     # st.markdown(f"#### **Típus:** *{card['Típus - HUN']}*")
     
     st.divider()
@@ -249,7 +281,7 @@ def game_logic():
             st.markdown(f"## **{st.session_state.player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
             
             import time
-            time.sleep(10)
+            time.sleep(3)
             # st.stop()
 
         else:

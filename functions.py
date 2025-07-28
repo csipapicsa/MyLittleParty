@@ -12,7 +12,8 @@ def set_query_param(key, value):
 
 
 def read_in_cards():
-    cards = pd.read_csv("Az én kicsi pártom - Kártyák.csv")
+    cards = pd.read_csv("Az én kicsi pártom - Kártyák.csv", skiprows=1)
+
     cards = cards[cards["online"] == "x"]
     cards = cards[["online", "Kártya leírás HUN", "Típus - HUN", "Jobbos bonus", "Balos Bonus"]]
     cards["Jobbos bonus"] = cards["Jobbos bonus"].astype(int)
