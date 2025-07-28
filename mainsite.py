@@ -279,7 +279,9 @@ def game_logic():
             # végső pontok kiírása
             st.markdown(f"## **{st.session_state.player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
             st.markdown(f"## **{st.session_state.player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
-            
+            st.session_state.new_game = True
+            st.success("Kattints a Beállítások gombra az új játékhoz!")
+
             import time
             time.sleep(3)
             # st.stop()
@@ -441,6 +443,7 @@ def main():
         st.session_state.player_2_points = 0
 
         if st.button("Játék indítása"):
+            st.session_state.new_game = False
             set_query_param("page", "game")
             st.session_state._init_game = True
             try:

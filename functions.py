@@ -24,7 +24,7 @@ def read_in_cards():
     return cards
 
 def show_all_cards():
-    cards = pd.read_csv("Az én kicsi pártom - Kártyák.csv")
+    cards = pd.read_csv("Az én kicsi pártom - Kártyák.csv", skiprows=1)
     cards = cards[["Kártya leírás HUN", "Típus - HUN", "Jobbos bonus", "Balos Bonus"]]
     cards = cards[
     cards["Kártya leírás HUN"].notna() &
