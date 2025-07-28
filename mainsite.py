@@ -147,6 +147,7 @@ def game_logic():
     c1, c2 = st.columns(2)
 
     round_key_suffix = f"_round_{st.session_state.rounds_current}"
+    # round_key_suffix = f"_round_{st.session_state.rounds_current}"
     if st.session_state.player_1_view == "Balos":
         with c1:
             szavazatok_player_1 = st.number_input(
@@ -322,19 +323,72 @@ def main():
             current_rounds = 1
         else:
             current_rounds = int(current_rounds)
-            
-        st.session_state.rounds = st.number_input("Körök száma", min_value=1, max_value=10, step=1, value=current_rounds)
+
+
+
+        
+        
+        # try:
+        #     del st.session_state.rounds_input
+        # except:
+        #     pass
+        # st.session_state.rounds = st.number_input("Körök száma", min_value=1, max_value=10, step=1, value=current_rounds, key="rounds_input")
+        # st.session_state.rounds_current = 1
+        # set_query_param("rounds", st.session_state.rounds)
+        # st.info(f" Rounds: {st.session_state.rounds} (jelenleg {st.session_state.rounds_current} körnél tartunk)")
+
+        # INIT (first run only)
+        if "rounds" not in st.session_state:
+            st.session_state.rounds = 5  # default
+        if "rounds_committed" not in st.session_state:
+            st.session_state.rounds_committed = st.session_state.rounds
+
+        # UI
+        new_value = st.number_input("Körök száma", min_value=1, max_value=10, value=st.session_state.rounds_committed)
+
+        # Detect change
+        if new_value != st.session_state.rounds_committed:
+            st.session_state.rounds_committed = new_value
+            st.session_state.rounds = new_value
+            set_query_param("rounds", new_value)
+            st.rerun()  # <- required for immediate effect
+
         st.session_state.rounds_current = 1
 
-        mellette_vagy_ellene = get_query_param("side")
-        if mellette_vagy_ellene == "_":
-            mellette_vagy_ellene = "Mellette"
+
+
+
+
+        # mellette_vagy_ellene = get_query_param("side")
+        # if mellette_vagy_ellene == "_":
+        #     mellette_vagy_ellene = "Mellette"
             
-        mellette_vagy_ellene = st.radio(
+        # mellette_vagy_ellene = st.radio(
+        #     "Minden körben mellette vagy ellene érveltek?",
+        #     ("Mellette", "Ellene"),
+        #     index=0 if mellette_vagy_ellene == "Mellette" else 1
+        # )
+
+        # Initial default (only once)
+        if "side" not in st.session_state:
+            st.session_state.side = get_query_param("side") or "Mellette"
+
+        # Show radio
+        new_side = st.radio(
             "Minden körben mellette vagy ellene érveltek?",
             ("Mellette", "Ellene"),
-            index=0 if mellette_vagy_ellene == "Mellette" else 1
+            index=0 if st.session_state.side == "Mellette" else 1
         )
+
+        # Detect change and rerun
+        if new_side != st.session_state.side:
+            st.session_state.side = new_side
+            set_query_param("side", new_side)
+            st.rerun()
+
+
+        
+
 
         # Set query parameters for state sharing / bookmarking
         set_query_param("player_1_name", játékos_1_neve)
@@ -347,8 +401,8 @@ def main():
         st.session_state.player_2_view = játékos_2_politikai_nézete
         set_query_param("rounds", st.session_state.rounds)
         # st.session_state.rounds = korok_szama
-        set_query_param("side", mellette_vagy_ellene)
-        st.session_state.side = mellette_vagy_ellene
+        set_query_param("side", st.session_state.side)
+        st.session_state.side = st.session_state.side
         set_query_param("player_1_points", 0)
         st.session_state.player_1_points = 0
         set_query_param("player_2_points", 0)
