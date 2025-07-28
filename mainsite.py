@@ -122,7 +122,7 @@ def game_logic():
     st.markdown(f"#### Kör {st.session_state.rounds_current} / {st.session_state.rounds}")
 
     st.markdown(f"#### **Téma:** *{card['Kártya leírás HUN']}*")
-    st.markdown(f"#### **Típus:** *{card['Típus - HUN']}*")
+    # st.markdown(f"#### **Típus:** *{card['Típus - HUN']}*")
     
     st.divider()
 
@@ -262,7 +262,7 @@ def game_logic():
 
 
 
-
+@st.fragment
 def main():
     st.markdown("#### Az én kicsi pártom kártyajáték - teszt oldal")
 
