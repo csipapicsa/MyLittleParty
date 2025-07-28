@@ -5,7 +5,7 @@ from functions import get_query_param, set_query_param, read_in_cards, show_all_
 st.set_page_config(
     page_title="Az én kicsi pártom",
     page_icon="🗳️",
-    layout="narrow",
+    layout="centered",
     initial_sidebar_state="expanded",
     menu_items={
         "Get help": "https://www.facebook.com/mounitarsasjatek",
