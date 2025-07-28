@@ -116,14 +116,9 @@ def game_logic():
 
     if "current_card" not in st.session_state:
         # st.session_state.current_card = st.session_state.cards.sample().iloc[0]
-        scroll_to_top()
-        st.components.v1.html("""
-            <script>
-                window.parent.scrollTo(0, 0);
-            </script>
-        """, height=0)
+        #scroll_to_top()
 
-        st.session_state.current_card = get_a_card(debug=False, print_info=True)
+        st.session_state.current_card = get_a_card(debug=False, print_info=False)
     # st.table(card)
     side = get_query_param('side')
 
@@ -295,7 +290,6 @@ def game_logic():
 
 
 
-
 @st.fragment
 def main():
     st.markdown("#### Az én kicsi pártom kártyajáték - teszt oldal")
@@ -316,7 +310,7 @@ def main():
         tab_names,
         index=selected_index,
         horizontal=True,
-        label_visibility="collapsed"
+        label_visibility="hidden"
     )
 
     # Update query param when user changes tab
@@ -325,6 +319,7 @@ def main():
         set_query_param("page", new_page)
         st.rerun()
 
+    
     # Content logic
     if new_page == "szabaly":
         st.markdown(szabaly)
@@ -453,6 +448,7 @@ def main():
             st.rerun()
 
     elif new_page == "game":
+        # st.info('no?')
         if st.session_state.get("_init_game", False):
             st.session_state.cards = read_in_cards()
             st.session_state._init_game = False
