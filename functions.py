@@ -30,7 +30,8 @@ def show_all_cards():
     cards["Kártya leírás HUN"].notna() &
     (cards["Kártya leírás HUN"].str.strip() != "")
     ]
-    cards["Jobbos bonus"] = cards["Jobbos bonus"].astype(int)
+    
+    cards["Jobbos bonus"] = cards["Jobbos bonus"].astype(int, errors='ignore')
     cards["Balos Bonus"] = cards["Balos Bonus"].astype(int, errors='ignore')
     st.markdown("### **Kártyák**")
     st.markdown("Csak úgy mutiba, hogy lásd, milyen kártyák vannak/lesznek a játékban.")
