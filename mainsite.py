@@ -318,9 +318,9 @@ def game_logic():
 
 @st.fragment
 def main():
+    st.markdown("<div id='top'></div>", unsafe_allow_html=True)
     st.markdown("#### Az én kicsi pártom kártyajáték - teszt oldal")
     
-
     tab_names = ["Szabályok", "Beállítások", "Játék", "Kártya ötletek"]
     tab_keys = ["szabaly", "settings", "game", "card_ideas"]
 
@@ -349,7 +349,7 @@ def main():
     
     # Content logic
     if new_page == "szabaly":
-        st.write("Verzió: 2025-07-30 18:41")
+        st.write("Verzió: 2025-07-30 18:44")
         st.markdown(szabaly)
     elif new_page == "settings":
         st.markdown("#### Beállítások")
@@ -489,6 +489,8 @@ def main():
 
     elif new_page == "card_ideas":
         show_all_cards()
+
+    st.markdown("<a href='#top'>Go to top</a>", unsafe_allow_html=True)
 
 main()
 
