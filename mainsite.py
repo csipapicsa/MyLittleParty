@@ -137,6 +137,7 @@ def get_a_card(debug=False, print_info=False):
 
 @st.fragment
 def game_logic():
+    st.markdown("<div id='top'></div>", unsafe_allow_html=True)
 
     if "current_card" not in st.session_state:
         # st.session_state.current_card = st.session_state.cards.sample().iloc[0]
@@ -268,14 +269,6 @@ def game_logic():
     # st.balloons()
 
     if st.button("Szavazatok rögzítése"):
-        components.html("""
-        <script>
-        window.parent.scrollTo(0, 0);
-        window.parent.document.body.scrollTop = 0;
-        window.parent.document.documentElement.scrollTop = 0;
-        </script>
-        """, height=0)
-
 
         _temp_pont_1 = szavazatok_player_1 * jobbos_bonus
         _temp_pont_2 = szavazatok_player_2 * balos_bonus
@@ -356,7 +349,7 @@ def main():
     
     # Content logic
     if new_page == "szabaly":
-        st.write("Verzió: 2025-07-30 17:56")
+        st.write("Verzió: 2025-07-30 18:41")
         st.markdown(szabaly)
     elif new_page == "settings":
         st.markdown("#### Beállítások")
