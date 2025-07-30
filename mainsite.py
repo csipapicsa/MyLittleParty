@@ -243,7 +243,7 @@ def game_logic():
     pontok_container = st.container()
 
     with pontok_container:
-        c_1, c1, c2, c_2 = st.columns(4)
+        c_1, c1, c2, c_2 = st.columns([2,1,1,2])
         if st.session_state.player_1_view == "Balos":
             with c1:
                 _player_1_name = get_query_param("player_1_name")
