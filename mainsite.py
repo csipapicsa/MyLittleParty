@@ -278,7 +278,7 @@ def game_logic():
         '''
 
         st.components.v1.html(js)
-        
+
         _temp_pont_1 = szavazatok_player_1 * jobbos_bonus
         _temp_pont_2 = szavazatok_player_2 * balos_bonus
         _current_player_1_points = get_query_param("player_1_points")
@@ -358,7 +358,7 @@ def main():
     
     # Content logic
     if new_page == "szabaly":
-        st.write("Verzió: 2025-07-30 17:42")
+        st.write("Verzió: 2025-07-30 17:49")
         st.markdown(szabaly)
     elif new_page == "settings":
         st.markdown("#### Beállítások")
