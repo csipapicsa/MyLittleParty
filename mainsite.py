@@ -1,6 +1,6 @@
 import streamlit as st
 
-from functions import get_query_param, set_query_param, read_in_cards, show_all_cards, teszt_gorgo
+from functions import get_query_param, set_query_param, read_in_cards, show_all_cards
 
 st.set_page_config(
     page_title="Az én kicsi pártom",
@@ -358,8 +358,6 @@ def main():
     if new_page == "szabaly":
         st.write("Verzió: 2025-07-30 17:56")
         st.markdown(szabaly)
-        if st.button("Scroll to Top"):
-            teszt_gorgo()
     elif new_page == "settings":
         st.markdown("#### Beállítások")
         options = ["Balos", "Jobbos"]
