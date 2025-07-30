@@ -188,9 +188,9 @@ def game_logic():
     c_1, c1, c2, c_2 = st.columns(4)
 
     with c1:
-        st.markdown(f"###### **Balos szavazati bonus:** \n\n ### {balos_bonus} x")
+        st.markdown(f"###### **Balos szavazati bonus:** \n\n {balos_bonus} x")
     with c2:
-        st.markdown(f"###### **Jobbos szavazati bonus:** \n\n ### {jobbos_bonus} x")
+        st.markdown(f"###### **Jobbos szavazati bonus:** \n\n {jobbos_bonus} x")
 
     st.markdown('<hr style="margin: 5px 0;">', unsafe_allow_html=True)
 
@@ -247,23 +247,23 @@ def game_logic():
             with c1:
                 _player_1_name = get_query_param("player_1_name")
                 _player_1_points = get_query_param("player_1_points")
-                st.markdown(f"#### **{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
+                st.markdown(f"####### **{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
 
             with c2:
                 _player_2_name = get_query_param("player_2_name")
                 _player_2_points = get_query_param("player_2_points")
-                st.markdown(f"#### **{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
+                st.markdown(f"####### **{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
 
         else:
             with c1:
                 _player_2_name = get_query_param("player_2_name")
                 _player_2_points = get_query_param("player_2_points")
-                st.markdown(f"#### **{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
+                st.markdown(f"####### **{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
 
             with c2:
                 _player_1_name = get_query_param("player_1_name")
                 _player_1_points = get_query_param("player_1_points")
-                st.markdown(f"#### **{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
+                st.markdown(f"####### **{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
 
     # st.balloons()
 
@@ -317,7 +317,7 @@ def game_logic():
 @st.fragment
 def main():
     st.markdown("#### Az én kicsi pártom kártyajáték - teszt oldal")
-    st.write("Verzió: 2025-07-30 17:40")
+    
 
     tab_names = ["Szabályok", "Beállítások", "Játék", "Kártya ötletek"]
     tab_keys = ["szabaly", "settings", "game", "card_ideas"]
@@ -347,6 +347,7 @@ def main():
     
     # Content logic
     if new_page == "szabaly":
+        st.write("Verzió: 2025-07-30 17:42")
         st.markdown(szabaly)
     elif new_page == "settings":
         st.markdown("#### Beállítások")
