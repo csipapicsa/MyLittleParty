@@ -268,11 +268,13 @@ def game_logic():
     # st.balloons()
 
     if st.button("Szavazatok rögzítése"):
-        st.markdown("""
+        components.html("""
         <script>
-        window.parent.document.querySelector('.main').scrollTop = 0;
+        window.parent.scrollTo(0, 0);
+        window.parent.document.body.scrollTop = 0;
+        window.parent.document.documentElement.scrollTop = 0;
         </script>
-        """, unsafe_allow_html=True)
+        """, height=0)
 
 
         _temp_pont_1 = szavazatok_player_1 * jobbos_bonus
@@ -354,7 +356,7 @@ def main():
     
     # Content logic
     if new_page == "szabaly":
-        st.write("Verzió: 2025-07-30 17:51")
+        st.write("Verzió: 2025-07-30 17:52")
         st.markdown(szabaly)
     elif new_page == "settings":
         st.markdown("#### Beállítások")
