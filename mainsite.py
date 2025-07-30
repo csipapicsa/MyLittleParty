@@ -247,12 +247,12 @@ def game_logic():
             with c1:
                 _player_1_name = get_query_param("player_1_name")
                 _player_1_points = get_query_param("player_1_points")
-                st.markdown(f"####### **{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
+                st.markdown(f"**{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
 
             with c2:
                 _player_2_name = get_query_param("player_2_name")
                 _player_2_points = get_query_param("player_2_points")
-                st.markdown(f"####### **{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
+                st.markdown(f"**{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
 
         else:
             with c1:
