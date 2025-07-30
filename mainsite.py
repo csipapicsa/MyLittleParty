@@ -317,6 +317,7 @@ def game_logic():
 @st.fragment
 def main():
     st.markdown("#### Az én kicsi pártom kártyajáték - teszt oldal")
+    st.write("Verzió: 2025-07-30 17:40")
 
     tab_names = ["Szabályok", "Beállítások", "Játék", "Kártya ötletek"]
     tab_keys = ["szabaly", "settings", "game", "card_ideas"]
