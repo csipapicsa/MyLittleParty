@@ -258,16 +258,17 @@ def game_logic():
             with c1:
                 _player_2_name = get_query_param("player_2_name")
                 _player_2_points = get_query_param("player_2_points")
-                st.markdown(f"####### **{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
+                st.markdown(f"**{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
 
             with c2:
                 _player_1_name = get_query_param("player_1_name")
                 _player_1_points = get_query_param("player_1_points")
-                st.markdown(f"####### **{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
+                st.markdown(f"**{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
 
     # st.balloons()
 
     if st.button("Szavazatok rögzítése"):
+        scroll_to_top()
         _temp_pont_1 = szavazatok_player_1 * jobbos_bonus
         _temp_pont_2 = szavazatok_player_2 * balos_bonus
         _current_player_1_points = get_query_param("player_1_points")
