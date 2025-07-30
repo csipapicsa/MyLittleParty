@@ -176,7 +176,7 @@ def game_logic():
     st.markdown(f"###### **Téma:** *{st.session_state.current_card['Kártya leírás HUN']}*")
     # st.markdown(f"#### **Típus:** *{card['Típus - HUN']}*")
     
-    st.markdown('<hr style="margin: 5px 0;">', unsafe_allow_html=True)
+    # st.markdown('<hr style="margin: 5px 0;">', unsafe_allow_html=True)
 
     # if mode == "erveles":
     #     st.markdown(f" ### Érveljetek  {hogyan}! ")
@@ -185,7 +185,7 @@ def game_logic():
 
     st.markdown(f"###### Érveljetek  {hogyan}! ")
 
-    st.markdown('<hr style="margin: 5px 0;">', unsafe_allow_html=True)
+    # st.markdown('<hr style="margin: 5px 0;">', unsafe_allow_html=True)
     c_1, c1, c2, c_2 = st.columns(4)
 
     with c1:
@@ -193,7 +193,7 @@ def game_logic():
     with c2:
         st.markdown(f"###### **Jobbos szavazati bonus:** \n\n {jobbos_bonus} x")
 
-    st.markdown('<hr style="margin: 5px 0;">', unsafe_allow_html=True)
+    # st.markdown('<hr style="margin: 5px 0;">', unsafe_allow_html=True)
 
 
     c_1, c1, c2, c_2 = st.columns(4)
@@ -236,35 +236,35 @@ def game_logic():
             )
 
 
-    st.markdown('<hr style="margin: 5px 0;">', unsafe_allow_html=True)
+    # st.markdown('<hr style="margin: 5px 0;">', unsafe_allow_html=True)
 
     st.markdown("###### **Játékosok pontjai**")
 
-    pontok_container = st.container()
+    # pontok_container = st.container()
 
-    with pontok_container:
-        c_1, c1, c2, c_2 = st.columns([2,1,1,2])
-        if st.session_state.player_1_view == "Balos":
-            with c1:
-                _player_1_name = get_query_param("player_1_name")
-                _player_1_points = get_query_param("player_1_points")
-                st.markdown(f"**{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
+    # with pontok_container:
+    c_1, c1, c2, c_2 = st.columns([2,1,1,2])
+    if st.session_state.player_1_view == "Balos":
+        with c1:
+            _player_1_name = get_query_param("player_1_name")
+            _player_1_points = get_query_param("player_1_points")
+            st.markdown(f"**{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
 
-            with c2:
-                _player_2_name = get_query_param("player_2_name")
-                _player_2_points = get_query_param("player_2_points")
-                st.markdown(f"**{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
+        with c2:
+            _player_2_name = get_query_param("player_2_name")
+            _player_2_points = get_query_param("player_2_points")
+            st.markdown(f"**{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
 
-        else:
-            with c1:
-                _player_2_name = get_query_param("player_2_name")
-                _player_2_points = get_query_param("player_2_points")
-                st.markdown(f"**{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
+    else:
+        with c1:
+            _player_2_name = get_query_param("player_2_name")
+            _player_2_points = get_query_param("player_2_points")
+            st.markdown(f"**{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
 
-            with c2:
-                _player_1_name = get_query_param("player_1_name")
-                _player_1_points = get_query_param("player_1_points")
-                st.markdown(f"**{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
+        with c2:
+            _player_1_name = get_query_param("player_1_name")
+            _player_1_points = get_query_param("player_1_points")
+            st.markdown(f"**{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
 
     # st.balloons()
 
