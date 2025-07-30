@@ -175,7 +175,7 @@ def game_logic():
     st.markdown(f"#### **Téma:** *{st.session_state.current_card['Kártya leírás HUN']}*")
     # st.markdown(f"#### **Típus:** *{card['Típus - HUN']}*")
     
-    st.divider()
+    st.markdown('<hr style="margin: 5px 0;">', unsafe_allow_html=True)
 
     # if mode == "erveles":
     #     st.markdown(f" ### Érveljetek  {hogyan}! ")
@@ -184,7 +184,7 @@ def game_logic():
 
     st.markdown(f" #### Érveljetek  {hogyan}! ")
 
-    st.divider()    
+    st.markdown('<hr style="margin: 5px 0;">', unsafe_allow_html=True)
     c1, c2 = st.columns(2)
 
     with c1:
@@ -192,7 +192,7 @@ def game_logic():
     with c2:
         st.markdown(f"#### **Jobbos szavazati bonus:** \n\n ### {jobbos_bonus} x")
 
-    st.divider()
+    st.markdown('<hr style="margin: 5px 0;">', unsafe_allow_html=True)
 
 
     c1, c2 = st.columns(2)
@@ -235,7 +235,7 @@ def game_logic():
             )
 
 
-    st.divider()
+    st.markdown('<hr style="margin: 5px 0;">', unsafe_allow_html=True)
 
     st.markdown("#### **Játékosok pontjai**")
 
