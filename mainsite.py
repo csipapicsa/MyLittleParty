@@ -359,7 +359,7 @@ def main():
         st.write("Verzió: 2025-07-30 17:56")
         st.markdown(szabaly)
         if st.button("Scroll to Top"):
-            scroll_to_top()
+            teszt_gorgo()
     elif new_page == "settings":
         st.markdown("#### Beállítások")
         options = ["Balos", "Jobbos"]
