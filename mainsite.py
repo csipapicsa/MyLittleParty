@@ -285,6 +285,7 @@ def game_logic():
         # st.info(st.session_state.rounds_current)
         # st.info(st.session_state.rounds)
         # st.info(int(st.session_state.rounds_current) == int(st.session_state.rounds))
+
         if st.session_state.rounds_current == st.session_state.rounds:
             # st.info("Na itt vagyunk e")
             # get winner
@@ -313,6 +314,13 @@ def game_logic():
             set_query_param("page", "game")
 
         st.rerun()
+        components.html("""
+        <script>
+            setTimeout(function() {
+                document.getElementById('top').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        </script>
+        """, height=0)
 
 
 
@@ -489,8 +497,6 @@ def main():
 
     elif new_page == "card_ideas":
         show_all_cards()
-
-    st.markdown("<a href='#top'>Go to top</a>", unsafe_allow_html=True)
 
 main()
 
