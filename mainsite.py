@@ -269,6 +269,16 @@ def game_logic():
 
     if st.button("Szavazatok rögzítése"):
         scroll_to_top()
+        js = '''
+        <script>
+            var body = window.parent.document.querySelector(".main");
+            console.log(body);
+            body.scrollTop = 0;
+        </script>
+        '''
+
+        st.components.v1.html(js)
+        
         _temp_pont_1 = szavazatok_player_1 * jobbos_bonus
         _temp_pont_2 = szavazatok_player_2 * balos_bonus
         _current_player_1_points = get_query_param("player_1_points")
