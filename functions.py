@@ -1,6 +1,16 @@
 import streamlit as st
 import pandas as pd
 
+def read_in_versions():
+    # readin versions.txt content line by line and write it
+    with open("versions.txt", "r", encoding="utf-8") as file:
+        versions = file.readlines()
+    versions = [line.strip() for line in versions if line.strip()]
+    
+    # Assuming 'st.write' is a function available in your environment (e.g., Streamlit)
+    # If not, you can replace it with 'print()' for console output.
+    for line in versions:
+        st.write(line) 
 
 def get_query_param(key):
     try:

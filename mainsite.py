@@ -1,6 +1,6 @@
 import streamlit as st
 
-from functions import get_query_param, set_query_param, read_in_cards, show_all_cards
+from functions import get_query_param, set_query_param, read_in_cards, show_all_cards, read_in_versions
 
 st.set_page_config(
     page_title="Az én kicsi pártom",
@@ -365,7 +365,7 @@ def main():
     
     # Content logic
     if new_page == "szabaly":
-        st.write("Verzió: 2025-07-30 18:44")
+        read_in_versions()
         st.markdown(szabaly)
     elif new_page == "settings":
         st.markdown("#### Beállítások")
