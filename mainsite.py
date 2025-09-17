@@ -428,6 +428,7 @@ def main():
         page = "szabaly"
 
     selected_index = tab_keys.index(page)
+    current_site = tab_names[selected_index]
 
     # Use radio to simulate tabs
     selected_tab = st.segmented_control(
@@ -435,6 +436,7 @@ def main():
         options = tab_names,
         selection_mode="single",
         # index=selected_index,
+        default=current_site,
         label_visibility="hidden"
     )
 
