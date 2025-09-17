@@ -2,6 +2,114 @@ import streamlit as st
 import pandas as pd
 import time
 
+def disable_scrolling():
+    """
+    Disable scrolling on mobile device. Tested on Android. 
+    """
+    #st.info("Scrolling behavior is disabled. Use the scroll wheel or arrow keys to scroll the page. If you want to use the touchpad, please use two fingers to scroll.")
+
+
+    # this guy doesnt work from 2025-09-10, fuck knwos why
+    # st.markdown("""
+    #     <style>
+    #     body {
+    #         overscroll-behavior: none;
+    #     }
+    #     </style>
+    # """, unsafe_allow_html=True)
+
+    # st.markdown("""
+    #     <style>
+    #     html, body, [data-testid="stAppViewContainer"] {
+    #         overscroll-behavior: none !important;
+    #         scroll-behavior: auto;
+    #     }
+    #     </style>
+    # """, unsafe_allow_html=True)
+
+    # this one is slighlt better probably, more resiliint for further releases. The previos one works for sure 
+
+
+    # 2025-09-10
+    # st.markdown("""
+    #     <style>
+    #     html, body, 
+    #     [data-testid="stAppViewContainer"],
+    #     .main,
+    #     .stApp {
+    #         overscroll-behavior: none !important;
+    #         scroll-behavior: auto;
+    #     }
+    #     </style>
+    # """, unsafe_allow_html=True)
+    st.markdown("""
+    <style>
+        html, body {
+            overscroll-behavior: none !important;
+            scroll-behavior: auto !important;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Prevent overscroll on all elements
+            document.body.style.overscrollBehavior = 'none';
+            document.documentElement.style.overscrollBehavior = 'none';
+            
+            // Find and update Streamlit containers
+            const containers = document.querySelectorAll('[data-testid="stAppViewContainer"], .main, .stApp');
+            containers.forEach(container => {
+                container.style.overscrollBehavior = 'none';
+            });
+            
+            // Prevent touchmove events that cause bounce
+            document.addEventListener('touchmove', function(e) {
+                if (e.target.closest('.main') || e.target.closest('[data-testid="stAppViewContainer"]')) {
+                    // Allow scrolling within content but prevent overscroll
+                    const element = e.target.closest('.main') || e.target.closest('[data-testid="stAppViewContainer"]');
+                    const { scrollTop, scrollHeight, clientHeight } = element;
+                    
+                    if ((scrollTop === 0 && e.touches[0].clientY > e.touches[0].clientY) ||
+                        (scrollTop + clientHeight >= scrollHeight && e.touches[0].clientY < e.touches[0].clientY)) {
+                        e.preventDefault();
+                    }
+                }
+            }, { passive: false });
+        });
+    </script>
+    """, unsafe_allow_html=True)
+
+
+def get_a_card(debug=False, print_info=False):
+    """Véletlenszerű kártya kiválasztása a kártyák közül"""
+    if "cards" not in st.session_state:
+        st.session_state.cards = read_in_cards()
+
+    # Csak egyszer vágjuk le a 10-es szeletet debug módban
+    if debug and "debug_filtered" not in st.session_state:
+        st.session_state.cards = st.session_state.cards.iloc[10:20].copy()
+        st.session_state.debug_filtered = True  # Ne vágjuk újra minden híváskor
+
+    if len(st.session_state.cards) == 0:
+        st.warning("Elfogytak a kártyák!")
+        return None
+
+    # get a random card, and remove it from the deck
+    card = st.session_state.cards.sample(1).iloc[0]
+    print(f"Kiválasztott kártya: {card['Kártya leírás HUN']}")
+    st.session_state.cards = st.session_state.cards.drop(card.name)
+
+    if debug:
+        st.info("----")
+        st.info(f"**Kiválasztott kártya:** `{card['Kártya leírás HUN']}`")
+        st.info(f"**Maradék kártyák száma:** {len(st.session_state.cards)}")
+        st.info(f"Maradék kártyák: {', '.join(st.session_state.cards['Kártya leírás HUN'].tolist())}")
+        st.info("----")
+
+    if print_info:
+        st.info(f"Maradék kártyák száma: {len(st.session_state.cards)}")
+
+    return card
+
 
 def clock_timer(SECONDS):
     ph = st.empty()
