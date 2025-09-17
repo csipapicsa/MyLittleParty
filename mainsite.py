@@ -129,6 +129,16 @@ def disable_scrolling():
         </style>
     """, unsafe_allow_html=True)
 
+    st.markdown("""
+        <style>
+        body {
+            overscroll-behavior: none;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+
+
 
 def init_variables():
     if "init_variables" not in st.session_state:
@@ -187,30 +197,6 @@ def get_a_card(debug=False, print_info=False):
 @st.fragment
 def game_logic():
     st.markdown("<div id='top'></div>", unsafe_allow_html=True)
-    st.markdown("""
-    <style>
-        .row {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-        .column {
-            flex: 1;
-        }
-    </style>
-
-    <div class="row">
-        <div class="column">
-            <label>Balos szavazati bonus</label>
-            <input type="text" value="2 x" disabled style="width: 100%">
-        </div>
-        <div class="column">
-            <label>Jobbos szavazati bonus</label>
-            <input type="text" value="1 x" disabled style="width: 100%">
-        </div>
-    </div>
-""", unsafe_allow_html=True)
-
 
     disable_scrolling()
 
