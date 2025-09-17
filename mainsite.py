@@ -61,11 +61,12 @@ Gyűjtsd a legtöbb szavazatot érveid meggyőző erejével! Aki a legtöbb pont
 1. **Beállítások:**
    - Állítsátok be a játékosok neveit és nézeteit (balos vagy jobbos).
    - Döntsétek el, hány kört játszotok (1–10).
+   - Állítsátok be, mennyi idő áll rendelkezésre az érvelésre (15, 30, 45, 60 másodperc)
    - Válasszátok ki, hogy minden körben a játékosok **a téma mellett vagy ellene érvelnek**. Ez végig ugyanaz marad.
 
 2. **Körök:**
    - Minden kör elején a játék húz egy kampánykártyát.
-   - Mindkét játékos röviden érvel szóban a játék beállítása szerint (mellette vagy ellene).
+   - Mindkét játékos érvel (mellette vagy ellene) ameddig az ideje engedi. Mindkét játékos érvel a témára. 
    - A választók szavaznak: mindenki 1 szavazatot adhat le.
    - A szavazatokból pontok keletkeznek az adott kártyán szereplő szorzók alapján.
 
@@ -83,7 +84,7 @@ Gyűjtsd a legtöbb szavazatot érveid meggyőző erejével! Aki a legtöbb pont
 
 ### A szerő üzenete
 
-- A pontozás súlyozása és a kártyák tartalma feltöltés alatt áll, és a játék folyamatosan fejlődik. Szóval szinte biztos, hogy a játék során találkozni fogtok hibákkal, vagy olyan kártyákkal, amelyek teljesen nem illenek a játékba. 
+- A pontozás súlyozása és a kártyák tartalma feltöltés alatt áll, és a játék folyamatosan fejlődik. Lehet, hogy a játék során találkozni fogtok hibákkal, vagy olyan kártyákkal, amelyek teljesen nem illenek a játékba. Ez van, írjatok ilyenkor.
 
 ###### Ötleted vagy visszajelzésed van?  
 Írd meg a [GitHub-oldalon](https://github.com/csipapicsa/MyLittleParty/discussions), a [Discord szerveren](https://discord.gg/AtnQJ6YcYA), vagy küldd el e-mailben: **gergo pont gyori pont project[kukac]gmail.com**
@@ -115,6 +116,8 @@ def scroll_to_top():
         </script>
     """, height=0)
 
+def on_player1_view_change():
+    st.session_state.player_1_view_state = st.session_state.player_1_view_selectbox
 
 @st.fragment
 def main():
@@ -168,48 +171,6 @@ def main():
             label_visibility="collapsed",
         )
 
-    # st.markdown("""
-    # <style>
-    #     .stSegmentedControl {
-    #         display: flex;
-    #         justify-content: center;
-    #         width: 100%;
-    #     }
-    #     .stSegmentedControl > div {
-    #         display: flex;
-    #         justify-content: center;
-    #     }
-    # </style>
-    # """, unsafe_allow_html=True)
-
-    # selected_tab = st.segmented_control(
-    #     label="Válassz lapot:",
-    #     options=tab_names,
-    #     default=current_site,
-    #     selection_mode="single",
-    #     label_visibility="collapsed",
-    # )
-
-
-
-    # selected_tab = st.segmented_control(
-    #     label = "Válassz lapot:",
-    #     options = tab_names,
-    #     selection_mode="single",
-    #     # index=selected_index,
-    #     default=current_site,
-    #     label_visibility="hidden"
-    # )
-
-    # Update query param when user changes tab
-    # if selected_tab is None or selected_tab not in tab_names:
-    #     selected_tab = tab_names[0]  # Use first tab name as default
-
-    # new_page = tab_keys[tab_names.index(selected_tab)]
-    # if new_page != page:
-    #     set_query_param("page", new_page)
-    #     st.rerun()
-
         # Update query param when user changes tab
     if selected_tab is not None and selected_tab in tab_names:
         new_page = tab_keys[tab_names.index(selected_tab)]
@@ -231,19 +192,31 @@ def main():
         cm1, cm2 = st.columns(2)
         with cm1:
             játékos_1_neve = st.text_input("Játékos 1 neve", value=get_query_param("player_1_name"))
-            _jatékos_1_politikai_nézete = get_query_param("player_1_view")
-            if _jatékos_1_politikai_nézete == "_":
-                _jatékos_1_politikai_nézete = "Balos"
-            játékos_1_politikai_nézete = st.selectbox("Játékos 1 politikai nézete", options, index=options.index(_jatékos_1_politikai_nézete))
+            
+            # Initialize session state only once
+            if "player_1_view_state" not in st.session_state:
+                _jatékos_1_politikai_nézete = get_query_param("player_1_view")
+                if _jatékos_1_politikai_nézete == "_":
+                    _jatékos_1_politikai_nézete = "Balos"
+                st.session_state.player_1_view_state = _jatékos_1_politikai_nézete
+
+            játékos_1_politikai_nézete = st.selectbox(
+                "Játékos 1 politikai nézete", 
+                options, 
+                index=options.index(st.session_state.player_1_view_state),
+                key="player_1_view_selectbox",
+                on_change=on_player1_view_change
+            )
 
         with cm2:
             játékos_2_neve = st.text_input("Játékos 2 neve", value=get_query_param("player_2_name"))
-            ellen_index = 1 - options.index(játékos_1_politikai_nézete)
+            ellen_index = 1 - options.index(st.session_state.player_1_view_state)
             játékos_2_politikai_nézete = st.selectbox(
                 "Játékos 2 politikai nézete",
                 options,
                 index=ellen_index,
-                disabled=True
+                disabled=True,
+                key="player_2_view_selectbox"
             )
 
         st.divider()
@@ -254,20 +227,6 @@ def main():
         else:
             current_rounds = int(current_rounds)
 
-
-
-        
-        
-        # try:
-        #     del st.session_state.rounds_input
-        # except:
-        #     pass
-        # st.session_state.rounds = st.number_input("Körök száma", min_value=1, max_value=10, step=1, value=current_rounds, key="rounds_input")
-        # st.session_state.rounds_current = 1
-        # set_query_param("rounds", st.session_state.rounds)
-        # st.info(f" Rounds: {st.session_state.rounds} (jelenleg {st.session_state.rounds_current} körnél tartunk)")
-
-        # INIT (first run only)
         if "rounds" not in st.session_state:
             st.session_state.rounds = 5  # default
         if "rounds_committed" not in st.session_state:
@@ -275,6 +234,9 @@ def main():
 
         # UI
         new_value = st.number_input("Körök száma", min_value=1, max_value=10, value=st.session_state.rounds_committed)
+
+        st.session_state.erveles_time = st.select_slider(label="Hány másodpercig akarsz érvelni?",
+                                                         options=[15, 30, 45, 60])
 
         # Detect change
         if new_value != st.session_state.rounds_committed:

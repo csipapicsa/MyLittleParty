@@ -80,24 +80,27 @@ def game_logic():
 
     cbal, cjobb = st.columns(2)
 
+    SECONDS = st.session_state.get("erveles_time", 30)
+
     with cbal:
 
-        timer_info = st.empty()
+        # timer_info = st.empty()
 
-        if st.button("Időzítés indítása (30 mp)"):
+        if st.button(f"Érvelés tájmer ({SECONDS} mp) indítása"):
             # from functions import clock_timer
-            timer_info.info("Időzítő fut...")
-            st.session_state.times_up = clock_timer(3)
+            # timer_info.info("Időzítő fut...")
+            st.session_state.times_up = clock_timer(SECONDS)
 
         if st.session_state.times_up:
             # st.success("Lejárt az idő. Rögzítsétek a szavazatokat!")
             st.session_state.times_up = False
             st.session_state.allow_record_votes = True
-            timer_info.info("Lejárt az idő. Rögzítsétek a szavazatokat!")
+            # timer_info.info("Lejárt az idő. Rögzítsétek a szavazatokat!")
 
         else:
+            pass
             # st.session_state.allow_record_votes = False    
-            timer_info.info("Indítsd el az időzítőt, ha szeretnétek időre érvelni!")
+            # timer_info.info("Indítsd el az időzítőt, ha szeretnétek időre érvelni!")
 
     with cjobb:
 
