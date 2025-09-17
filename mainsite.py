@@ -456,7 +456,7 @@ def main():
     tab_keys = ["szabaly", "settings", "game", "card_ideas"]
 
     init_variables()
-    # disable_scrolling()
+    disable_scrolling()
 
     font_size = 12
     st._config.set_option(f'theme.baseFontSize', font_size) # type: ignore
