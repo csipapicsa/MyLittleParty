@@ -337,6 +337,7 @@ def main():
     elif new_page == "game":
         # st.info('no?')
         if st.session_state.get("_init_game", False):
+            # set_query_param("rounds_current", 0)
             st.session_state.cards = read_in_cards()
             st.session_state._init_game = False
 

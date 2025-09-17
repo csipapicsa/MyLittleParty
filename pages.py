@@ -5,6 +5,7 @@ import time
 @st.fragment
 def game_logic():
     st.markdown("<div id='top'></div>", unsafe_allow_html=True)
+    end_of_game = False
 
     disable_scrolling()
 
@@ -99,10 +100,8 @@ def game_logic():
             timer_info.info("Indítsd el az időzítőt, ha szeretnétek időre érvelni!")
 
     with cjobb:
-    
-        button_start = st.button("Szavazatok rögzítése", key=f"commit_votes{round_key_suffix}", disabled = False)
 
-        if button_start:
+        if st.button("Szavazatok rögzítése", key=f"commit_votes{round_key_suffix}", disabled = False):
 
             _temp_pont_1 = szavazatok_player_1 * jobbos_bonus
             _temp_pont_2 = szavazatok_player_2 * balos_bonus
@@ -112,46 +111,35 @@ def game_logic():
             set_query_param("player_2_points", int(_current_player_2_points) + int(_temp_pont_2))
             del st.session_state.current_card
             
-            vote_keys_to_delete = [key for key in st.session_state.keys() if key.startswith(('player_1_votes', 'player_2_votes'))]
+            vote_keys_to_delete = [key for key in st.session_state.keys() if key.startswith(('player_1_votes', 'player_2_votes'))] # type: ignore
             for key in vote_keys_to_delete:
                 del st.session_state[key]
-            # st.info("Még nem vagyunk itt")
-            # st.info(st.session_state.rounds_current)
-            # st.info(st.session_state.rounds)
-            # st.info(int(st.session_state.rounds_current) == int(st.session_state.rounds))
-
-            if st.session_state.rounds_current == st.session_state.rounds:
-                # st.info("Na itt vagyunk e")
-                # get winner
-                _player_1_points = get_query_param("player_1_points")
-                _player_2_points = get_query_param("player_2_points")
-                if int(_player_1_points) > int(_player_2_points):
-                    st.success(f"{st.session_state.player_1_name} nyert {int(_player_1_points)} ponttal!")
-                elif int(_player_1_points) < int(_player_2_points):
-                    st.success(f"{st.session_state.player_2_name} nyert {int(_player_2_points)} ponttal!")
-                else:
-                    st.success("Döntetlen!")
-                st.balloons()
-                # végső pontok kiírása
-                st.markdown(f"## **{st.session_state.player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
-                st.markdown(f"## **{st.session_state.player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
-                st.session_state.new_game = True
-                st.success("Kattints a Beállítások gombra az új játékhoz!")
-
-                
-                time.sleep(5)
-                # st.stop()
-
+            st.session_state.rounds_current += 1
+            set_query_param("rounds_current", st.session_state.rounds_current)
+            if st.session_state.rounds_current-1 < st.session_state.rounds:
+                end_of_game = False
+                st.rerun()
             else:
-                st.session_state.rounds_current += 1
-                set_query_param("rounds_current", st.session_state.rounds_current)
-                set_query_param("page", "game")
+                end_of_game = True
+    
+    if end_of_game:
+        _player_1_points = get_query_param("player_1_points")
+        _player_2_points = get_query_param("player_2_points")
+        if int(_player_1_points) > int(_player_2_points):
+            st.success(f"{st.session_state.player_1_name} nyert {int(_player_1_points)} ponttal!")
+        elif int(_player_1_points) < int(_player_2_points):
+            st.success(f"{st.session_state.player_2_name} nyert {int(_player_2_points)} ponttal!")
+        else:
+            st.success("Döntetlen!")
+        st.balloons()
+        # végső pontok kiírása
+        st.markdown(f"## **{st.session_state.player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
+        st.markdown(f"## **{st.session_state.player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
+        st.session_state.new_game = True
+        st.success("Kattints a Beállítások gombra az új játékhoz!")
+        time.sleep(5)
 
-            st.rerun()
-            # components.html("""
-            # <script>
-            #     setTimeout(function() {
-            #         document.getElementById('top').scrollIntoView({ behavior: 'smooth' });
-            #     }, 100);
-            # </script>
-            # """, height=0)
+    # if st.session_state.rounds_current == st.session_state.rounds:
+        # st.info("Na itt vagyunk e")
+        # get winner
+

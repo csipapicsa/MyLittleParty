@@ -95,7 +95,7 @@ def get_a_card(debug=False, print_info=False):
 
     # get a random card, and remove it from the deck
     card = st.session_state.cards.sample(1).iloc[0]
-    print(f"Kiválasztott kártya: {card['Kártya leírás HUN']}")
+    # print(f"Kiválasztott kártya: {card['Kártya leírás HUN']}")
     st.session_state.cards = st.session_state.cards.drop(card.name)
 
     if debug:
