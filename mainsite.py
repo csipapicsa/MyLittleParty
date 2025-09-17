@@ -188,6 +188,8 @@ def get_a_card(debug=False, print_info=False):
 def game_logic():
     st.markdown("<div id='top'></div>", unsafe_allow_html=True)
 
+    disable_scrolling()
+
     if "current_card" not in st.session_state:
         # st.session_state.current_card = st.session_state.cards.sample().iloc[0]
         #scroll_to_top()
@@ -598,6 +600,7 @@ def main():
     elif new_page == "card_ideas":
         show_all_cards()
 
+disable_scrolling()
 main()
 
 
