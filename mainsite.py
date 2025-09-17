@@ -430,15 +430,68 @@ def main():
     selected_index = tab_keys.index(page)
     current_site = tab_names[selected_index]
 
-    # Use radio to simulate tabs
-    selected_tab = st.segmented_control(
-        label = "Válassz lapot:",
-        options = tab_names,
-        selection_mode="single",
-        # index=selected_index,
-        default=current_site,
-        label_visibility="hidden"
-    )
+    # st.markdown("""
+    # <style>
+    #     div[data-testid="stSegmentedControl"] {
+    #         display: flex;
+    #         justify-content: center;
+    #     }
+    #     div[data-testid="stSegmentedControl"] > div {
+    #         margin: 0 auto;
+    #     }
+    # </style>
+    # """, unsafe_allow_html=True)
+
+    # selected_tab = st.segmented_control(
+    #     label="Válassz lapot:",
+    #     options=tab_names,
+    #     default=current_site,
+    #     selection_mode="single",
+    #     label_visibility="collapsed",
+    # )
+
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        selected_tab = st.segmented_control(
+            label="Válassz lapot:",
+            options=tab_names,
+            default=current_site,
+            selection_mode="single",
+            label_visibility="collapsed",
+        )
+
+    # st.markdown("""
+    # <style>
+    #     .stSegmentedControl {
+    #         display: flex;
+    #         justify-content: center;
+    #         width: 100%;
+    #     }
+    #     .stSegmentedControl > div {
+    #         display: flex;
+    #         justify-content: center;
+    #     }
+    # </style>
+    # """, unsafe_allow_html=True)
+
+    # selected_tab = st.segmented_control(
+    #     label="Válassz lapot:",
+    #     options=tab_names,
+    #     default=current_site,
+    #     selection_mode="single",
+    #     label_visibility="collapsed",
+    # )
+
+
+
+    # selected_tab = st.segmented_control(
+    #     label = "Válassz lapot:",
+    #     options = tab_names,
+    #     selection_mode="single",
+    #     # index=selected_index,
+    #     default=current_site,
+    #     label_visibility="hidden"
+    # )
 
     # Update query param when user changes tab
     # if selected_tab is None or selected_tab not in tab_names:
