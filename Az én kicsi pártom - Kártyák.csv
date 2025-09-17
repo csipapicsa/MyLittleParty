@@ -101,7 +101,7 @@ x,86,,Vasárnapi boltzár,Kampány,,1,1,,,,,,,,11,11,,graphics/k.jpg,graphics/ja
 ,99,,Világpolgár nevelés programja,,,,,,,,,,,,,,,,,,
 x,87,,Verseny betiltása iskolában - mindenki egyforma jegyet kap,Kampány,,3,1,,,,,,,,,,,,,,
 x,88,4,Visszaszerezni a Trianonban elcsatolt területeket,Kampány,Campaign,1,3,0,0,0,0,2,,,13,31,0 0 0 0 2,graphics/szj.jpg,graphics/jani.jpg,,
-,102,,,,,,,-8,-7,-5,-9,-10,,,,,,,,,
+x,102,,"A ""Szkíta állam"" megalkítása",Kampány,,1,4,-8,-7,-5,-9,-10,,,,,,,,,
 ,103,,,,,,,16,17,9,18,15,,,,,,,,,
 ,104,,,,,,,,,,,,,,,,,,,,
 ,105,,,,,,,,,,,,,,,,,,,,
