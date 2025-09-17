@@ -235,7 +235,7 @@ def main():
         # UI
         new_value = st.number_input("Körök száma", min_value=1, max_value=10, value=st.session_state.rounds_committed)
 
-        st.session_state.erveles_time = st.select_slider(label="Hány másodpercig akarsz érvelni?",
+        st.session_state.erveles_time = st.select_slider(label="Hány másodpercig akartok érvelni?",
                                                          options=[15, 30, 45, 60])
 
         # Detect change
