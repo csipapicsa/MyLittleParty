@@ -116,25 +116,54 @@ def disable_scrolling():
     # """, unsafe_allow_html=True)
 
     # this one is slighlt better probably, more resiliint for further releases. The previos one works for sure 
-    # 2025-09-10
-    st.markdown("""
-        <style>
-        html, body, 
-        [data-testid="stAppViewContainer"],
-        .main,
-        .stApp {
-            overscroll-behavior: none !important;
-            scroll-behavior: auto;
-        }
-        </style>
-    """, unsafe_allow_html=True)
 
+
+    # 2025-09-10
+    # st.markdown("""
+    #     <style>
+    #     html, body, 
+    #     [data-testid="stAppViewContainer"],
+    #     .main,
+    #     .stApp {
+    #         overscroll-behavior: none !important;
+    #         scroll-behavior: auto;
+    #     }
+    #     </style>
+    # """, unsafe_allow_html=True)
     st.markdown("""
-        <style>
-        body {
-            overscroll-behavior: none;
+    <style>
+        html, body {
+            overscroll-behavior: none !important;
+            scroll-behavior: auto !important;
         }
-        </style>
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Prevent overscroll on all elements
+            document.body.style.overscrollBehavior = 'none';
+            document.documentElement.style.overscrollBehavior = 'none';
+            
+            // Find and update Streamlit containers
+            const containers = document.querySelectorAll('[data-testid="stAppViewContainer"], .main, .stApp');
+            containers.forEach(container => {
+                container.style.overscrollBehavior = 'none';
+            });
+            
+            // Prevent touchmove events that cause bounce
+            document.addEventListener('touchmove', function(e) {
+                if (e.target.closest('.main') || e.target.closest('[data-testid="stAppViewContainer"]')) {
+                    // Allow scrolling within content but prevent overscroll
+                    const element = e.target.closest('.main') || e.target.closest('[data-testid="stAppViewContainer"]');
+                    const { scrollTop, scrollHeight, clientHeight } = element;
+                    
+                    if ((scrollTop === 0 && e.touches[0].clientY > e.touches[0].clientY) ||
+                        (scrollTop + clientHeight >= scrollHeight && e.touches[0].clientY < e.touches[0].clientY)) {
+                        e.preventDefault();
+                    }
+                }
+            }, { passive: false });
+        });
+    </script>
     """, unsafe_allow_html=True)
 
 
