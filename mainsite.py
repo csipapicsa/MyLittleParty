@@ -1,6 +1,8 @@
 import streamlit as st
 
-from functions import get_query_param, set_query_param, read_in_cards, show_all_cards, read_in_versions
+from functions import get_query_param, set_query_param, read_in_cards, show_all_cards, read_in_versions, clock_timer
+
+import streamlit.components.v1 as components
 
 st.set_page_config(
     page_title="Az én kicsi pártom",
@@ -88,10 +90,57 @@ Gyűjtsd a legtöbb szavazatot érveid meggyőző erejével! Aki a legtöbb pont
 ---
 """
 
+def disable_scrolling():
+    """
+    Disable scrolling on mobile device. Tested on Android. 
+    """
+    #st.info("Scrolling behavior is disabled. Use the scroll wheel or arrow keys to scroll the page. If you want to use the touchpad, please use two fingers to scroll.")
 
 
+    # this guy doesnt work from 2025-09-10, fuck knwos why
+    # st.markdown("""
+    #     <style>
+    #     body {
+    #         overscroll-behavior: none;
+    #     }
+    #     </style>
+    # """, unsafe_allow_html=True)
 
-import streamlit.components.v1 as components
+    # st.markdown("""
+    #     <style>
+    #     html, body, [data-testid="stAppViewContainer"] {
+    #         overscroll-behavior: none !important;
+    #         scroll-behavior: auto;
+    #     }
+    #     </style>
+    # """, unsafe_allow_html=True)
+
+    # this one is slighlt better probably, more resiliint for further releases. The previos one works for sure 
+    # 2025-09-10
+    st.markdown("""
+        <style>
+        html, body, 
+        [data-testid="stAppViewContainer"],
+        .main,
+        .stApp {
+            overscroll-behavior: none !important;
+            scroll-behavior: auto;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+
+def init_variables():
+    if "init_variables" not in st.session_state:
+        st.session_state.init_variables = True
+        st.session_state.new_game = True
+        st.session_state.times_up = False
+        st.session_state.rounds_current = 1
+        st.session_state.player_1_points = 0
+        st.session_state.player_2_points = 0
+        st.session_state._init_game = False
+
+
 def scroll_to_top():
     """Függvény az oldal tetejére való ugráshoz"""
     components.html("""
@@ -276,59 +325,84 @@ def game_logic():
 
     # st.balloons()
 
-    if st.button("Szavazatok rögzítése"):
+    cbal, cjobb = st.columns(2)
 
-        _temp_pont_1 = szavazatok_player_1 * jobbos_bonus
-        _temp_pont_2 = szavazatok_player_2 * balos_bonus
-        _current_player_1_points = get_query_param("player_1_points")
-        _current_player_2_points = get_query_param("player_2_points")
-        set_query_param("player_1_points", int(_current_player_1_points) + int(_temp_pont_1))
-        set_query_param("player_2_points", int(_current_player_2_points) + int(_temp_pont_2))
-        del st.session_state.current_card
-        
-        vote_keys_to_delete = [key for key in st.session_state.keys() if key.startswith(('player_1_votes', 'player_2_votes'))]
-        for key in vote_keys_to_delete:
-            del st.session_state[key]
-        # st.info("Még nem vagyunk itt")
-        # st.info(st.session_state.rounds_current)
-        # st.info(st.session_state.rounds)
-        # st.info(int(st.session_state.rounds_current) == int(st.session_state.rounds))
+    with cbal:
 
-        if st.session_state.rounds_current == st.session_state.rounds:
-            # st.info("Na itt vagyunk e")
-            # get winner
-            _player_1_points = get_query_param("player_1_points")
-            _player_2_points = get_query_param("player_2_points")
-            if int(_player_1_points) > int(_player_2_points):
-                st.success(f"{st.session_state.player_1_name} nyert {int(_player_1_points)} ponttal!")
-            elif int(_player_1_points) < int(_player_2_points):
-                st.success(f"{st.session_state.player_2_name} nyert {int(_player_2_points)} ponttal!")
-            else:
-                st.success("Döntetlen!")
-            st.balloons()
-            # végső pontok kiírása
-            st.markdown(f"## **{st.session_state.player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
-            st.markdown(f"## **{st.session_state.player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
-            st.session_state.new_game = True
-            st.success("Kattints a Beállítások gombra az új játékhoz!")
+        timer_info = st.empty()
 
-            import time
-            time.sleep(3)
-            # st.stop()
+        if st.button("Időzítés indítása (30 mp)"):
+            # from functions import clock_timer
+            timer_info.info("Időzítő fut...")
+            st.session_state.times_up = clock_timer(3)
+
+        if st.session_state.times_up:
+            # st.success("Lejárt az idő. Rögzítsétek a szavazatokat!")
+            st.session_state.times_up = False
+            st.session_state.allow_record_votes = True
+            timer_info.info("Lejárt az idő. Rögzítsétek a szavazatokat!")
 
         else:
-            st.session_state.rounds_current += 1
-            set_query_param("rounds_current", st.session_state.rounds_current)
-            set_query_param("page", "game")
+            # st.session_state.allow_record_votes = False    
+            timer_info.info("Indítsd el az időzítőt, ha szeretnétek időre érvelni!")
 
-        st.rerun()
-        components.html("""
-        <script>
-            setTimeout(function() {
-                document.getElementById('top').scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-        </script>
-        """, height=0)
+    with cjobb:
+    
+        button_start = st.button("Szavazatok rögzítése", key=f"commit_votes{round_key_suffix}", disabled = False)
+
+        if button_start:
+
+            _temp_pont_1 = szavazatok_player_1 * jobbos_bonus
+            _temp_pont_2 = szavazatok_player_2 * balos_bonus
+            _current_player_1_points = get_query_param("player_1_points")
+            _current_player_2_points = get_query_param("player_2_points")
+            set_query_param("player_1_points", int(_current_player_1_points) + int(_temp_pont_1))
+            set_query_param("player_2_points", int(_current_player_2_points) + int(_temp_pont_2))
+            del st.session_state.current_card
+            
+            vote_keys_to_delete = [key for key in st.session_state.keys() if key.startswith(('player_1_votes', 'player_2_votes'))]
+            for key in vote_keys_to_delete:
+                del st.session_state[key]
+            # st.info("Még nem vagyunk itt")
+            # st.info(st.session_state.rounds_current)
+            # st.info(st.session_state.rounds)
+            # st.info(int(st.session_state.rounds_current) == int(st.session_state.rounds))
+
+            if st.session_state.rounds_current == st.session_state.rounds:
+                # st.info("Na itt vagyunk e")
+                # get winner
+                _player_1_points = get_query_param("player_1_points")
+                _player_2_points = get_query_param("player_2_points")
+                if int(_player_1_points) > int(_player_2_points):
+                    st.success(f"{st.session_state.player_1_name} nyert {int(_player_1_points)} ponttal!")
+                elif int(_player_1_points) < int(_player_2_points):
+                    st.success(f"{st.session_state.player_2_name} nyert {int(_player_2_points)} ponttal!")
+                else:
+                    st.success("Döntetlen!")
+                st.balloons()
+                # végső pontok kiírása
+                st.markdown(f"## **{st.session_state.player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont")
+                st.markdown(f"## **{st.session_state.player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
+                st.session_state.new_game = True
+                st.success("Kattints a Beállítások gombra az új játékhoz!")
+
+                import time
+                time.sleep(3)
+                # st.stop()
+
+            else:
+                st.session_state.rounds_current += 1
+                set_query_param("rounds_current", st.session_state.rounds_current)
+                set_query_param("page", "game")
+
+            st.rerun()
+            components.html("""
+            <script>
+                setTimeout(function() {
+                    document.getElementById('top').scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            </script>
+            """, height=0)
 
 
 
@@ -340,6 +414,12 @@ def main():
     tab_names = ["Szabályok", "Beállítások", "Játék", "Kártya ötletek"]
     tab_keys = ["szabaly", "settings", "game", "card_ideas"]
 
+    init_variables()
+    disable_scrolling()
+
+    font_size = 10
+    st._config.set_option(f'theme.baseFontSize', font_size) # type: ignore
+
     # Get page from query, default to "szabaly"
     page = get_query_param("page")
     if page not in tab_keys:
@@ -348,19 +428,31 @@ def main():
     selected_index = tab_keys.index(page)
 
     # Use radio to simulate tabs
-    selected_tab = st.radio(
-        "Válassz lapot:",
-        tab_names,
-        index=selected_index,
-        horizontal=True,
+    selected_tab = st.segmented_control(
+        label = "Válassz lapot:",
+        options = tab_names,
+        selection_mode="single",
+        # index=selected_index,
         label_visibility="hidden"
     )
 
     # Update query param when user changes tab
-    new_page = tab_keys[tab_names.index(selected_tab)]
-    if new_page != page:
-        set_query_param("page", new_page)
-        st.rerun()
+    # if selected_tab is None or selected_tab not in tab_names:
+    #     selected_tab = tab_names[0]  # Use first tab name as default
+
+    # new_page = tab_keys[tab_names.index(selected_tab)]
+    # if new_page != page:
+    #     set_query_param("page", new_page)
+    #     st.rerun()
+
+        # Update query param when user changes tab
+    if selected_tab is not None and selected_tab in tab_names:
+        new_page = tab_keys[tab_names.index(selected_tab)]
+        if new_page != page:
+            set_query_param("page", new_page)
+            st.rerun()
+    else:
+        new_page = page  # Keep current page if selection is invalid
 
     
     # Content logic
@@ -487,7 +579,7 @@ def main():
             st.session_state._init_game = True
             try:
                 del st.session_state.current_card
-            except:
+            except Exception:
                 pass
             st.rerun()
 
