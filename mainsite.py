@@ -20,9 +20,16 @@ Gyűjtsd a legtöbb szavazatot érveid meggyőző erejével! Aki a legtöbb pont
 
 ### 👥 Játékosok
 
-- A játékhoz minimum három játékos szükséges.
-- Az egyik játékos **baloldali**, a másik **jobboldali** nézetet képvisel. A többiek a szavazók szerepét töltik be. - 💡 *Tipp:* Akkor a legszórakoztatóbb, ha a saját meggyőződéseddel **ellentétes** oldalt választasz.
+**Hagyományos mód (minimum 3 fő):**
+- Két játékos: **baloldali** és **jobboldali** politikus szerepében
+- További játékosok: **szavazók** szerepében
+- 💡 *Tipp:* Akkor a legszórakoztatóbb, ha a saját meggyőződéseddel **ellentétes** oldalt választasz.
 
+**AI ellenfél mód (minimum 2 fő):**
+- Egy emberi játékos egy politikai oldalt képvisel
+- A **mesterséges intelligencia** lesz az ellenfél (másik politikai oldal)
+- Legalább 1 szavazó szükséges a pontok eldöntéséhez
+- Az AI automatikusan generál érvelést minden témához
 
 ---
 
@@ -67,6 +74,17 @@ Extra kihívásért bekapcsolhatod az **utasítás-kártya rendszert**!
 
 ---
 
+### 🤖 AI ellenfélről
+
+Az AI játékos:
+- Automatikusan generál kampánybeszédeket a téma alapján
+- Figyelembe veszi a politikai oldalát és az érvelés irányát
+- Ha kap utasítás-kártyát, beépíti az érvelésébe
+- A generált szöveg ~30-120 szó hosszú, az időkorláttól függően
+- Az AI érvelését fel kell olvasni az egyik szavazónak. Lehetőleg meggyőzően.
+
+---
+
 ### 🏆 A játék vége
 
 - Az utolsó kör után a játék automatikusan kiírja a nyertest.
@@ -76,6 +94,7 @@ Extra kihívásért bekapcsolhatod az **utasítás-kártya rendszert**!
 ### A szerő üzenete
 
 - A pontozás súlyozása és a kártyák tartalma feltöltés alatt áll, és a játék folyamatosan fejlődik. Lehet, hogy a játék során találkozni fogtok hibákkal, vagy olyan kártyákkal, amelyek teljesen nem illenek a játékba. Ez van, írjatok ilyenkor.
+- Az AI játékos még kísérleti funkció. Ingyenes, szóval elszöszmög majd, ha egyáltalán válaszol.
 
 ###### Ötleted vagy visszajelzésed van?  
 Írd meg a [GitHub-oldalon](https://github.com/csipapicsa/MyLittleParty/discussions), a [Discord szerveren](https://discord.gg/AtnQJ6YcYA), vagy küldd el e-mailben: **gergo pont gyori pont project[kukac]gmail.com**
