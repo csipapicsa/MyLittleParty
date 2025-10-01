@@ -236,7 +236,7 @@ def main():
                 on_change=on_player1_view_change
             )
 
-        st.warning("Még nem megy az ai mód")
+        # st.warning("Még nem megy az ai mód")
         jatek_gep_ellen = st.toggle("Játék az AI ellen", 
                             value=get_query_param("gep_ellen", return_type="bool"),
                             help="Ha ezt választod, akkor a játékos 2 szerepét az AI fogja betölteni (amíg van ingyenes token).",
