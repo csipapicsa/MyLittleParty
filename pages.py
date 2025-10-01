@@ -1,5 +1,5 @@
 import streamlit as st
-from functions import get_query_param, set_query_param, disable_scrolling, get_a_card, clock_timer, run_timer, get_a_random_guide_card
+from functions import get_query_param, set_query_param, disable_scrolling, get_a_card, clock_timer, run_timer_human, get_a_random_guide_card, get_next_speaker, has_everyone_argued_this_round, run_timer_ai
 import time
 import random
 
@@ -94,22 +94,46 @@ def game_logic():
         st.session_state.get_random_text_chance
 
     with cbal:
-        if st.button(f"Érvelés tájmer ({SECONDS} mp) indítása"):
+        
+        disable_button = has_everyone_argued_this_round()
+        if st.button(f"Érvelés tájmer ({SECONDS} mp) indítása", disabled=disable_button):
             st.session_state.times_up = False  # Reset timer flag
+            ki_ervel = get_next_speaker()
+            if ki_ervel == "player_1":
+                ki_ervel_nev = f"**{st.session_state.player_1_name}**, _{st.session_state.player_1_view}_"
+                politika_oldal = st.session_state.player_1_view
+                second_player_ai = False
+            else:
+                ki_ervel_nev = f"**{st.session_state.player_2_name}**, _{st.session_state.player_2_view}_"
+                politika_oldal = st.session_state.player_2_view
+                second_player_ai = True if get_query_param("gep_ellen", return_type="bool") else False
+            
 
             if random.randint(1, 100) <= st.session_state.get_random_text_chance:
                 extra_task_text = get_a_random_guide_card()
             else:
                 extra_task_text = ""
 
-            run_timer(seconds=SECONDS, 
-                      topic_message=theme_message, 
-                      hogyan_message=hogyan_message, 
-                      extra_task_message=extra_task_text)      # Open the dialog
+            if not second_player_ai:
+                run_timer_human(seconds=SECONDS, 
+                        topic_message=theme_message, 
+                        hogyan_message=hogyan_message, 
+                        extra_task_message=extra_task_text,
+                        ki_ervel_nev=ki_ervel_nev,
+                        second_player_ai=second_player_ai,
+                        politikai_oldal=politika_oldal)      # Open the dialog
+            else:
+                run_timer_ai(seconds=SECONDS, 
+                        topic_message=theme_message, 
+                        hogyan_message=hogyan_message, 
+                        extra_task_message=extra_task_text,
+                        ki_ervel_nev=ki_ervel_nev,
+                        politikai_oldal=politika_oldal)      # Open the dialog
+
 
     with cjobb:
-
-        if st.button("Szavazatok rögzítése", key=f"commit_votes{round_key_suffix}", disabled = False):
+        disable_button = not has_everyone_argued_this_round()
+        if st.button("Szavazatok rögzítése", key=f"commit_votes{round_key_suffix}", disabled = disable_button):
 
             _temp_pont_1 = szavazatok_player_1 * jobbos_bonus
             _temp_pont_2 = szavazatok_player_2 * balos_bonus
@@ -123,6 +147,7 @@ def game_logic():
             for key in vote_keys_to_delete:
                 del st.session_state[key]
             st.session_state.rounds_current += 1
+            st.session_state.speakers_this_round = []
             set_query_param("rounds_current", st.session_state.rounds_current)
             if st.session_state.rounds_current-1 < st.session_state.rounds:
                 end_of_game = False

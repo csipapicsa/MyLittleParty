@@ -3,6 +3,7 @@ import pandas as pd
 import time
 import random
 from itertools import product
+from functions_ai import generate_prompt, get_answer
 
 def disable_scrolling():
     """
@@ -151,23 +152,29 @@ def clock_timer(SECONDS):
 #         st.rerun()
 
 
-@st.dialog("⏳ Érvelés ideje", dismissible=False, width="small")
-def run_timer(seconds: int, 
+@st.dialog("⏳ Érvelés ideje és részletei", dismissible=False, width="small")
+def run_timer_human(seconds: int, 
               topic_message: str, 
               hogyan_message: str, 
-              extra_task_message: str):
+              extra_task_message: str,
+              ki_ervel_nev: str,
+              second_player_ai: bool,
+              politikai_oldal: str):
     
+    
+    ki_ervel = st.empty()
     topic_ph = st.empty()   # for dynamic text
     extra_task_ph = st.empty()
     hogyan_ph = st.empty()
     timer_ph = st.empty()    # for the timer
 
+    ki_ervel.write(f'# Aki érvel: {ki_ervel_nev}')
     topic_ph.write(topic_message)
     if extra_task_message != "":
         extra_task_ph.write(f'## {extra_task_message}')
 
     hogyan_ph.write(hogyan_message)
-
+    
     if st.button("Lökheted", key="start_button", disabled=False):
         for secs in range(seconds, 0, -1):
             mm, ss = secs // 60, secs % 60
@@ -177,6 +184,98 @@ def run_timer(seconds: int,
         timer_ph.metric(label="⏰ Letelt", value="00:00")
         st.session_state.times_up = True
         st.rerun()
+
+# @st.dialog("⏳ Érvelés ideje és részletei", dismissible=False, width="small")
+# def run_timer_ai(seconds: int, 
+#               topic_message: str, 
+#               hogyan_message: str, 
+#               extra_task_message: str,
+#               ki_ervel_nev: str,
+#               second_player_ai: bool,
+#               politikai_oldal: str):
+    
+#     # get current time, print inof
+    
+#     ki_ervel = st.empty()
+#     topic_ph = st.empty()   # for dynamic text
+#     extra_task_ph = st.empty()
+#     hogyan_ph = st.empty()
+#     timer_ph = st.empty()    # for the timer
+
+#     ki_ervel.write(f'# Aki érvel: {ki_ervel_nev}')
+#     topic_ph.write(topic_message)
+#     if extra_task_message != "":
+#         extra_task_ph.write(f'## {extra_task_message}')
+
+#     hogyan_ph.write(hogyan_message)
+#     prompt = generate_prompt(tema = topic_message, 
+#                                 utasitas = extra_task_message,
+#                                 erveles_iranya = hogyan_message,
+#                                 politikai_oldal = politikai_oldal,
+#                                 ido = seconds,
+#                                 debug=False)
+    
+#     if not st.session_state.times_up:
+#         from datetime import datetime
+#         st.info("Times up?")
+#         st.info(st.session_state.times_up)
+        
+#         st.info(f"Idő: {datetime.now().strftime('%H:%M:%S')}")
+#         st.info("Getting the answer")
+#         time.sleep(3)
+#         answer = "this is it"
+#         # answer = get_answer(prompt)
+#     # time.sleep(5)
+#     # answer = "Demo válasz"
+#     st.markdown(f"**{answer}**")
+    
+#     if st.button("Elolvastuk", key="start_button", disabled=False):
+#         st.session_state.times_up = True
+#         st.rerun()
+
+
+@st.dialog("⏳ AI Érvelése", dismissible=False, width="small")
+def run_timer_ai(seconds: int, 
+              topic_message: str, 
+              hogyan_message: str, 
+              extra_task_message: str,
+              ki_ervel_nev: str,
+              politikai_oldal: str):
+    
+    st.write(f'# Aki érvel: {ki_ervel_nev}')
+    st.write(topic_message)
+    if extra_task_message != "":
+        st.write(f'## {extra_task_message}')
+    st.write(hogyan_message)
+    
+    # Generálás csak egyszer
+    if "ai_answer_generated" not in st.session_state:
+        prompt = generate_prompt(
+            tema=topic_message, 
+            utasitas=extra_task_message,
+            erveles_iranya=hogyan_message,
+            politikai_oldal=politikai_oldal,
+            ido=seconds,
+            debug=False
+        )
+
+        # answer = "This is the answer"
+        answer = get_answer(prompt)
+        
+        st.session_state.ai_answer = answer
+        st.session_state.ai_answer_generated = True
+            # NE LEGYEN ITT st.rerun()!
+    
+    # Válasz megjelenítése (már van session_state-ben)
+    st.markdown(f"# {st.session_state.ai_answer}")
+    
+    # Gomb ami bezárja
+    if st.button("Elolvastuk", key="ai_done"):
+        # Cleanup
+        del st.session_state.ai_answer
+        del st.session_state.ai_answer_generated
+        st.session_state.times_up = True
+        st.rerun()  # Most már OK a rerun, mert bezárjuk
 
 def read_in_versions():
     # readin versions.txt content line by line and write it
@@ -268,5 +367,28 @@ def get_a_random_guide_card():
     st.session_state.guide_lapok = st.session_state.guide_lapok.drop(card.name)
 
     return card.values[0]
+
+def get_next_speaker():
+    if "speakers_this_round" not in st.session_state:
+        st.session_state.speakers_this_round = []
+
+    already_spoken = st.session_state.speakers_this_round
+
+    if len(already_spoken) == 0:
+        next_speaker = random.choice(["player_1", "player_2"])
+    elif len(already_spoken) == 1:
+        next_speaker = "player_2" if already_spoken[0] == "player_1" else "player_1"
+    else:
+        return None  # mindketten beszéltek
+
+    st.session_state.speakers_this_round.append(next_speaker)
+    return next_speaker
+
+
+def has_everyone_argued_this_round():
+    """
+    True, ha ebben a körben már ketten beszéltek.
+    """
+    return len(st.session_state.get("speakers_this_round", [])) >= 2
 
 

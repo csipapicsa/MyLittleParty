@@ -3,6 +3,7 @@ import streamlit as st
 from functions import get_query_param, set_query_param, read_in_cards, show_all_cards, read_in_versions, disable_scrolling, get_and_generate_all_guide_cards
 from pages import game_logic
 from time import sleep
+import random
 
 import streamlit.components.v1 as components
 
@@ -121,6 +122,11 @@ def init_variables():
         st.session_state.guide_lapok = get_and_generate_all_guide_cards()
         st.session_state.get_random_text = False
         st.session_state.get_random_text_chance = 100
+        st.session_state.jatek_gep_ellen = False
+        try:
+            del st.session_state["ai_answer_generated"]
+        except Exception:
+            pass
 
 
 def scroll_to_top():
@@ -136,6 +142,9 @@ def scroll_to_top():
 
 def on_player1_view_change():
     st.session_state.player_1_view_state = st.session_state.player_1_view_selectbox
+    set_query_param('player_1_view', st.session_state.player_1_view_state)
+    ellen_state = "Jobbos" if st.session_state.player_1_view_state == "Balos" else "Balos"
+    set_query_param('player_2_view', ellen_state)
 
 @st.fragment
 def main():
@@ -208,6 +217,7 @@ def main():
         options = ["Balos", "Jobbos"]
 
         cm1, cm2 = st.columns(2)
+        
         with cm1:
             játékos_1_neve = st.text_input("Játékos 1 neve", value=get_query_param("player_1_name"))
             
@@ -226,15 +236,33 @@ def main():
                 on_change=on_player1_view_change
             )
 
+        st.warning("Még nem megy az ai mód")
+        jatek_gep_ellen = st.toggle("Játék az AI ellen", 
+                            value=get_query_param("gep_ellen", return_type="bool"),
+                            help="Ha ezt választod, akkor a játékos 2 szerepét az AI fogja betölteni (amíg van ingyenes token).",
+                            key="gep_ellen")
+        
+        if jatek_gep_ellen and get_query_param("player_2_name") == "":
+            nevek = ["Józsi", "Pisti", "Béci", "Renátó", "Lajoska", "Kati", "Erzsike"]
+            # choose a random name
+            játékos_2_neve = random.choice(nevek)
+            set_query_param("player_2_name", f"AI {játékos_2_neve}")
+
+        if jatek_gep_ellen != st.session_state.jatek_gep_ellen:
+            st.session_state.jatek_gep_ellen = jatek_gep_ellen
+            set_query_param("gep_ellen", "true" if jatek_gep_ellen else "false")
+            # st.rerun()
+
         with cm2:
             játékos_2_neve = st.text_input("Játékos 2 neve", value=get_query_param("player_2_name"))
             ellen_index = 1 - options.index(st.session_state.player_1_view_state)
+            key2 = f"player_2_view_selectbox_{ellen_index}"
             játékos_2_politikai_nézete = st.selectbox(
                 "Játékos 2 politikai nézete",
                 options,
                 index=ellen_index,
                 disabled=True,
-                key="player_2_view_selectbox"
+                key=key2
             )
         
         current_rounds = get_query_param("rounds")
