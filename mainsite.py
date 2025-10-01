@@ -1,32 +1,10 @@
 import streamlit as st
 
-from functions import get_query_param, set_query_param, read_in_cards, show_all_cards, read_in_versions, disable_scrolling
+from functions import get_query_param, set_query_param, read_in_cards, show_all_cards, read_in_versions, disable_scrolling, get_and_generate_all_guide_cards
 from pages import game_logic
+from time import sleep
 
 import streamlit.components.v1 as components
-
-st.set_page_config(
-    page_title="Az én kicsi pártom",
-    page_icon="🗳️",
-    layout="centered",
-    initial_sidebar_state="expanded",
-    menu_items={
-        "Get help": "https://www.facebook.com/mounitarsasjatek",
-        "Report a bug": "https://discord.gg/AtnQJ6YcYA",
-        "About": """
-### 🎲 Az én kicsi pártom
-
-Egy szatirikus politikai társasjáték, ahol kampánytémák mentén kell érvelned – akár a saját nézeteiddel szembemenve is.
-
-###### Ötleted vagy visszajelzésed van?  
-Írd meg a [GitHub-oldalon](https://github.com/csipapicsa/MyLittleParty/discussions),  
-a [Discord szerveren](https://discord.gg/AtnQJ6YcYA),  
-vagy küldd el e-mailben: **gergo.pont.gyori.pont.project[kukac]gmail.com**
-        """
-    }
-)
-
-
 
 szabaly = """
 ### 🎲 Az én kicsi pártom – Játékszabályok
@@ -53,6 +31,18 @@ Gyűjtsd a legtöbb szavazatot érveid meggyőző erejével! Aki a legtöbb pont
 - A kártyákhoz pontszorzók is tartoznak, attól függően, hogy melyik oldal számára előnyös a téma, illetve hogy a játékos épp mellette vagy ellene érvel.  
   Például: egy baloldali nézőpontú játékos számára egy balos téma melletti érvelés nem jár szorzóval, de ha ugyanezen a téma mellett egy jobboldali játékos érvel meggyőzően, bónuszszorzót kap. Ugyanez fordítva is igaz: jobboldali nézőpontból egy jobbos téma ellen érvelve is szorzót kaphatsz, ha így is képes vagy szavazatokat szerezni.
 
+### 🎭 Utasítás-kártyák (opcionális)
+
+Extra kihívásért bekapcsolhatod az **utasítás-kártya rendszert**! 
+
+- **Hogyan működik?** A beállításoknál egy csúszkával állíthatod be, hogy mekkora eséllyel kapjon a játékos véletlenszerű utasítást minden körben (0-100%).
+- **Mi az utasítás?** Egy retorikai feladat, amit be kell építened az érvelésedbe. Például: *"Hivatkozz a pápára!"*, *"Hibáztatd az oroszokat!"*, *"Légy szarkasztikus Trumppal!"*
+- **Miért jó?** Kiszámíthatatlanná és viccesebbé teszi a játékot, mert váratlan irányokba kell terelned az érvelésedet.
+- **Pontozás:** Az utasítások nem adnak extra pontot – de ha ügyesen használod őket, meggyőzőbb lehetsz!
+
+💡 *Tipp:* Kezdőknek 20-30% esély ajánlott, haladóknak 50-70% már komoly kihívás!
+
+
 ---
 
 ### 🔁 A játék menete
@@ -65,7 +55,8 @@ Gyűjtsd a legtöbb szavazatot érveid meggyőző erejével! Aki a legtöbb pont
 
 2. **Körök:**
    - Minden kör elején a játék húz egy kampánykártyát.
-   - Mindkét játékos érvel (mellette vagy ellene) ameddig az ideje engedi. Mindkét játékos érvel a témára. 
+   - Mindkét játékos érvel (mellette vagy ellene) ameddig az ideje engedi. Mindkét játékos érvel a témára.
+      - Ha be van kapcsolva, véletlenszerűen kaphat a játékos egy utasítás-kártyát is.
    - A választók szavaznak: mindenki 1 szavazatot adhat le.
    - A szavazatokból pontok keletkeznek az adott kártyán szereplő szorzók alapján.
 
@@ -91,6 +82,31 @@ Gyűjtsd a legtöbb szavazatot érveid meggyőző erejével! Aki a legtöbb pont
 ---
 """
 
+st.set_page_config(
+    page_title="Az én kicsi pártom",
+    page_icon="🗳️",
+    layout="centered",
+    initial_sidebar_state="expanded",
+    menu_items={
+        "Get help": "https://www.facebook.com/mounitarsasjatek",
+        "Report a bug": "https://discord.gg/AtnQJ6YcYA",
+        "About": """
+### 🎲 Az én kicsi pártom
+
+Egy szatirikus politikai társasjáték, ahol kampánytémák mentén kell érvelned – akár a saját nézeteiddel szembemenve is.
+
+###### Ötleted vagy visszajelzésed van?  
+Írd meg a [GitHub-oldalon](https://github.com/csipapicsa/MyLittleParty/discussions),  
+a [Discord szerveren](https://discord.gg/AtnQJ6YcYA),  
+vagy küldd el e-mailben: **gergo.pont.gyori.pont.project[kukac]gmail.com**
+        """
+    }
+)
+
+
+
+
+
 def init_variables():
     if "init_variables" not in st.session_state:
         st.session_state.init_variables = True
@@ -102,6 +118,9 @@ def init_variables():
         st.session_state._init_game = False
         st.session_state.player_dictionary = {  "player_1": {"name": "Player 1", "points": 0, "view": "Balos"},
                                                 "player_2": {"name": "Player 2", "points": 0, "view": "Jobbos"}}
+        st.session_state.guide_lapok = get_and_generate_all_guide_cards()
+        st.session_state.get_random_text = False
+        st.session_state.get_random_text_chance = 100
 
 
 def scroll_to_top():
@@ -217,8 +236,6 @@ def main():
                 disabled=True,
                 key="player_2_view_selectbox"
             )
-
-        st.divider()
         
         current_rounds = get_query_param("rounds")
         if current_rounds == "_":
@@ -234,15 +251,18 @@ def main():
         # UI
         new_value = st.number_input("Körök száma", min_value=1, max_value=10, value=st.session_state.rounds_committed)
 
-        st.session_state.erveles_time = st.select_slider(label="Hány másodpercig akartok érvelni?",
-                                                         options=[15, 30, 45, 60])
-
-        # Detect change
         if new_value != st.session_state.rounds_committed:
             st.session_state.rounds_committed = new_value
             st.session_state.rounds = new_value
             set_query_param("rounds", new_value)
             st.rerun()  # <- required for immediate effect
+
+
+        st.session_state.erveles_time = st.select_slider(label="Hány másodpercig akartok érvelni?",
+                                                         options=[15, 30, 45, 60])
+
+        # Detect change
+
 
         st.session_state.rounds_current = 1
 
@@ -257,14 +277,36 @@ def main():
             index=0 if st.session_state.side == "Mellette" else 1
         )
 
+        st.divider()
+        st.write("##### Véletlen utasítások játékmód:")
+        st.write("A csúszka beállítja, hogy **mekkora eséllyel kapsz véletlenszerű utasítást** minden körben. Ha 0-ra van állítva, nem kapsz utasítást. Minél magasabb az érték, annál nagyobb az esély, hogy kapj egyet. Az utasítást bele kell szőnöd az érvelésedbe.")
+        esely_a_random_textre = st.slider(label="Véletlen utasítások utasítások esesélye (%)", 
+                                          min_value=0, 
+                                          max_value=100, 
+                                          step=1,
+                                          value=get_query_param("get_random_text_chance", return_type="int"))
+        
+
+        if esely_a_random_textre > 0:
+            st.session_state.get_random_text = True
+            # st.session_state.get_random_text_chance = esely_a_random_textre
+
+
+        if esely_a_random_textre != st.session_state.get_random_text_chance:
+            # st.info("esely_a_random_textre")
+            # st.info(esely_a_random_textre)
+            # sleep(5)
+            st.session_state.get_random_text_chance = esely_a_random_textre
+            set_query_param("get_random_text_chance", esely_a_random_textre)
+            st.rerun()  # <- required for immediate effect
+        
+        st.divider()
+
         # Detect change and rerun
         if new_side != st.session_state.side:
             st.session_state.side = new_side
             set_query_param("side", new_side)
             st.rerun()
-
-
-        
 
 
         # Set query parameters for state sharing / bookmarking

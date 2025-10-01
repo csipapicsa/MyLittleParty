@@ -1,6 +1,7 @@
 import streamlit as st
-from functions import get_query_param, set_query_param, disable_scrolling, get_a_card, clock_timer, run_timer
+from functions import get_query_param, set_query_param, disable_scrolling, get_a_card, clock_timer, run_timer, get_a_random_guide_card
 import time
+import random
 
 @st.fragment
 def game_logic():
@@ -10,11 +11,13 @@ def game_logic():
     disable_scrolling()
 
     if "current_card" not in st.session_state:
-        # st.session_state.current_card = st.session_state.cards.sample().iloc[0]
-        #scroll_to_top()
+
 
         st.session_state.current_card = get_a_card(debug=False, print_info=False)
-    # st.table(card)
+
+    # get a new one every time. Super dumb, but fuck cares. There is a lot anyways    
+    # st.session_state.current_guide_card = get_a_random_guide_card()
+
     side = get_query_param('side')
 
     if side == "Mellette":
@@ -37,7 +40,8 @@ def game_logic():
     st.markdown(f"###### Kör {st.session_state.rounds_current} / {st.session_state.rounds}")
     st.markdown(f"###### **Téma:** *{st.session_state.current_card['Kártya leírás HUN']}*") # type: ignore
     st.markdown(f"###### Érveljetek  {hogyan}! ")
-    timer_message = f"# **Téma:** *{st.session_state.current_card['Kártya leírás HUN']}* \n\n # Érvelj  {hogyan}! "
+    theme_message = f"# **Téma:** *{st.session_state.current_card['Kártya leírás HUN']}* "
+    hogyan_message = f"# Érvelj  {hogyan}! "
 
     c1, c2 = st.columns(2)
 
@@ -86,10 +90,22 @@ def game_logic():
 
     SECONDS = st.session_state.get("erveles_time", 30)
 
+    if random.randint(0, 100) <= st.session_state.get_random_text_chance:
+        st.session_state.get_random_text_chance
+
     with cbal:
         if st.button(f"Érvelés tájmer ({SECONDS} mp) indítása"):
             st.session_state.times_up = False  # Reset timer flag
-            run_timer(SECONDS, timer_message)      # Open the dialog
+
+            if random.randint(1, 100) <= st.session_state.get_random_text_chance:
+                extra_task_text = get_a_random_guide_card()
+            else:
+                extra_task_text = ""
+
+            run_timer(seconds=SECONDS, 
+                      topic_message=theme_message, 
+                      hogyan_message=hogyan_message, 
+                      extra_task_message=extra_task_text)      # Open the dialog
 
     with cjobb:
 

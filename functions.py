@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import time
+import random
+from itertools import product
 
 def disable_scrolling():
     """
@@ -122,22 +124,59 @@ def clock_timer(SECONDS):
 
     return True
 
-
 # 2025-10-01: Új időzítő, mert jobb
+# @st.dialog("⏳ Érvelés ideje", dismissible=False, width="small")
+# def run_timer(seconds: int, 
+#               topic_message: str, 
+#               hogyan_message: str, 
+#               extra_task_message: str):
+    
+#     topic_ph = st.empty()   # for dynamic text
+#     extra_task_ph = st.empty()
+#     hogyan_ph = st.empty()
+#     timer_ph = st.empty()    # for the timer
+
+#     if st.button("Indíccs", key="start_button", disabled=False):
+#         for secs in range(seconds, 0, -1):
+#             mm, ss = secs // 60, secs % 60
+#             topic_ph.write(topic_message)
+#             if extra_task_message != "":
+#                 extra_task_ph.write(f'## {extra_task_message}')
+#             hogyan_ph.write(hogyan_message)
+#             timer_ph.metric(label="idő", value=f"{mm:02d}:{ss:02d}", label_visibility="hidden")
+#             time.sleep(1)
+
+#         timer_ph.metric(label="⏰ Letelt", value="00:00")
+#         st.session_state.times_up = True
+#         st.rerun()
+
+
 @st.dialog("⏳ Érvelés ideje", dismissible=False, width="small")
-def run_timer(seconds: int, message: str):
-    mes = st.empty()   # for dynamic text
-    ph = st.empty()    # for the timer
+def run_timer(seconds: int, 
+              topic_message: str, 
+              hogyan_message: str, 
+              extra_task_message: str):
+    
+    topic_ph = st.empty()   # for dynamic text
+    extra_task_ph = st.empty()
+    hogyan_ph = st.empty()
+    timer_ph = st.empty()    # for the timer
 
-    for secs in range(seconds, 0, -1):
-        mm, ss = secs // 60, secs % 60
-        mes.write(message)
-        ph.metric(label="idő", value=f"{mm:02d}:{ss:02d}", label_visibility="hidden")
-        time.sleep(1)
+    topic_ph.write(topic_message)
+    if extra_task_message != "":
+        extra_task_ph.write(f'## {extra_task_message}')
 
-    ph.metric(label="⏰ Letelt", value="00:00")
-    st.session_state.times_up = True
-    st.rerun()
+    hogyan_ph.write(hogyan_message)
+
+    if st.button("Lökheted", key="start_button", disabled=False):
+        for secs in range(seconds, 0, -1):
+            mm, ss = secs // 60, secs % 60
+            timer_ph.metric(label="idő", value=f"{mm:02d}:{ss:02d}", label_visibility="hidden")
+            time.sleep(1)
+
+        timer_ph.metric(label="⏰ Letelt", value="00:00")
+        st.session_state.times_up = True
+        st.rerun()
 
 def read_in_versions():
     # readin versions.txt content line by line and write it
@@ -150,15 +189,31 @@ def read_in_versions():
     for line in versions:
         st.write(line) 
 
-def get_query_param(key):
+def get_query_param(key, return_type="str"):
     try:
-        return st.query_params[key]
+        value = st.query_params[key]
+
+        if return_type == "str":
+            return value
+        elif return_type == "bool":
+            return str(value).lower() in ["1", "true", "yes"]
+        elif return_type == "int":
+            return int(value)
+        else:
+            return value
     except KeyError:
-        return "_"
+        if return_type == "str":
+            return "_"
+        elif return_type == "bool":
+            return False
+        else:
+            return None
     
 def set_query_param(key, value):
-    st.query_params[key] = value
-
+    if isinstance(value, bool):
+        st.query_params[key] = "1" if value else "0"
+    else:
+        st.query_params[key] = str(value)
 
 def read_in_cards():
     cards = pd.read_csv("Az én kicsi pártom - Kártyák.csv", skiprows=1)
@@ -185,3 +240,33 @@ def show_all_cards():
     st.markdown("### **Kártyák**")
     st.markdown("Csak úgy mutiba, hogy lásd, milyen kártyák vannak/lesznek a játékban.")
     st.dataframe(cards)
+
+
+def extra_task_generator(chance=0.5):
+    if random.random() < chance:
+        extra_task = "Fogd a pápára"
+        return extra_task
+    else:
+        return ""
+
+
+def get_and_generate_all_guide_cards():
+    cards = pd.read_csv("Az én kicsi pártom - Guide lapok.csv")
+    cards = cards[["Guide", "Tárgya"]]
+    guides = cards["Guide"].dropna().unique()
+    targets = cards["Tárgya"].dropna().unique()
+    combinations = [f"{g} {t}" for g, t in product(guides, targets)]
+    guide_lapok = pd.DataFrame(combinations, columns=["Guide x Tárgya kombináció"])
+    # guide_lapok = guide_lapok["Guide x Tárgya kombináció"].to_list()
+
+    return guide_lapok
+
+def get_a_random_guide_card():
+        # get a random card, and remove it from the deck
+    card = st.session_state.guide_lapok.sample(1).iloc[0]
+    # print(f"Kiválasztott kártya: {card['Kártya leírás HUN']}")
+    st.session_state.guide_lapok = st.session_state.guide_lapok.drop(card.name)
+
+    return card.values[0]
+
+
