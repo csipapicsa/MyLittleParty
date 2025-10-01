@@ -89,7 +89,6 @@ def game_logic():
     cbal, cjobb = st.columns(2)
 
     SECONDS = st.session_state.get("erveles_time", 15)
-    SECONDS = 1
 
     if random.randint(0, 100) <= st.session_state.get_random_text_chance:
         st.session_state.get_random_text_chance
