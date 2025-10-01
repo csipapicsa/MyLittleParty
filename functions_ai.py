@@ -19,7 +19,12 @@ def get_answer(prompt):
         st.error(f" Valami baj van, egész pontosan ez: \n\n {e}")
         return "Hát erre most nem tudok mit mondani. Elfogytak a szavak more."
 
-def generate_prompt(tema, utasitas, erveles_iranya, politikai_oldal, ido, debug=False):
+def generate_prompt(tema, 
+                    retorikai_feladat, 
+                    erveles_iranya, 
+                    politikai_oldal, 
+                    ido, 
+                    debug=False):
     # Szószám kalkuláció (átlag 2.5 szó/másodperc beszédnél)
     szo_per_masodperc = 2.5
     target_szo_szam = int(ido * szo_per_masodperc)
@@ -27,23 +32,23 @@ def generate_prompt(tema, utasitas, erveles_iranya, politikai_oldal, ido, debug=
     szo_tartomany_max = int(target_szo_szam * 1.1)  # +10%
 
     # Prompt összeállítása
-    prompt = f"""Te egy **{politikai_oldal.lower()} politikus** vagy egy vitajátékban.
-
+    prompt = f"""Te egy **{politikai_oldal.lower()} politikus** vagy egy politikai vitajátékban. 
+    
     **A játék célja:** Meggyőző érvelés a megadott témában, hogy szavazatokat szerezz.
 
     **Fontos szabályok:**
     - Rövid, tömör érvelés (max {ido} másodperc felolvasási idő, kb. {szo_tartomany_min}-{szo_tartomany_max} szó)
     - Kampány-stílusú beszéd (emotív, meggyőző, néha szatirikus)
-    - A politikai oldaladat ({politikai_oldal}) képviseld, de kreatívan
-    - Az utasítást kötelező beépíteni az érvelésbe
+    - A politikai oldaladat ({politikai_oldal}) képviseld. Kreatívan és ha kell, szélsőségesen, néha viccesen is, időnként engedve az absztrakt gondolkodásnak.
+    - A retorikai feladatot kötelező beépíteni az érvelésbe
 
     ---
 
-    **TÉMA:** {tema}
+    {tema.upper()}
 
-    **ÉRVELJ:** {erveles_iranya.upper()}
+    {erveles_iranya.upper()}
 
-    **UTASÍTÁS:** {utasitas}
+    {retorikai_feladat.upper()}
 
     ---
 
@@ -51,8 +56,8 @@ def generate_prompt(tema, utasitas, erveles_iranya, politikai_oldal, ido, debug=
     Írj egy {ido} másodperces kampánybeszédet, amely:
     1. Érvel a téma {erveles_iranya}
     2. {politikai_oldal} nézőpontból közelít
-    3. Beépíti az utasítást: "{utasitas}"
-    4. Meggyőző, kampányszerű, esetleg humoros/szatirikus
+    3. Beépíti a "{retorikai_feladat}"
+    4. Meggyőző, kampányszerű, esetleg humoros/szatirikus, esetleg absztrakt
 
     **Fontos:** Ne magyarázd el mit csinálsz, csak add meg a beszédet! Ne írj meta-kommenteket!
 

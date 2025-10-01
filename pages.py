@@ -38,10 +38,10 @@ def game_logic():
 
     st.session_state.rounds = int(get_query_param("rounds"))
     st.markdown(f"###### Kör {st.session_state.rounds_current} / {st.session_state.rounds}")
-    st.markdown(f"###### **Téma:** *{st.session_state.current_card['Kártya leírás HUN']}*") # type: ignore
+    st.markdown(f"###### **Kampánytéma:** {st.session_state.current_card['Kártya leírás HUN']}") # type: ignore
     st.markdown(f"###### Érveljetek  {hogyan}! ")
-    theme_message = f"# **Téma:** *{st.session_state.current_card['Kártya leírás HUN']}* "
-    hogyan_message = f"# Érvelj  {hogyan}! "
+    theme_message = f"*Kampánytéma:* {st.session_state.current_card['Kártya leírás HUN']} "
+    hogyan_message = f"*Érvelj {hogyan}*! "
 
     c1, c2 = st.columns(2)
 
@@ -111,6 +111,7 @@ def game_logic():
 
             if random.randint(1, 100) <= st.session_state.get_random_text_chance:
                 extra_task_text = get_a_random_guide_card()
+                extra_task_text = f"*Retorikai feladat:* {extra_task_text}"
             else:
                 extra_task_text = ""
 
@@ -126,9 +127,10 @@ def game_logic():
                 run_timer_ai(seconds=SECONDS, 
                         topic_message=theme_message, 
                         hogyan_message=hogyan_message, 
-                        extra_task_message=extra_task_text,
+                        retorikai_feladat=extra_task_text,
                         ki_ervel_nev=ki_ervel_nev,
-                        politikai_oldal=politika_oldal)      # Open the dialog
+                        politikai_oldal=politika_oldal,
+                        debug=False)      # Open the dialog
 
 
     with cjobb:

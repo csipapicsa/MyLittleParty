@@ -175,12 +175,12 @@ def run_timer_human(seconds: int,
     hogyan_ph = st.empty()
     timer_ph = st.empty()    # for the timer
 
-    ki_ervel.write(f'# Aki érvel: {ki_ervel_nev}')
-    topic_ph.write(topic_message)
+    ki_ervel.write(f'# *Aki érvel:* {ki_ervel_nev}')
+    topic_ph.write(f'# {topic_message}')
     if extra_task_message != "":
-        extra_task_ph.write(f'## {extra_task_message}')
+        extra_task_ph.write(f'# {extra_task_message}')
 
-    hogyan_ph.write(hogyan_message)
+    hogyan_ph.write(f'# {hogyan_message}')
     
     if st.button("Lökheted", key="start_button", disabled=False):
         for secs in range(seconds, 0, -1):
@@ -245,36 +245,40 @@ def run_timer_human(seconds: int,
 def run_timer_ai(seconds: int, 
               topic_message: str, 
               hogyan_message: str, 
-              extra_task_message: str,
+              retorikai_feladat: str,
               ki_ervel_nev: str,
-              politikai_oldal: str):
+              politikai_oldal: str,
+              debug=False):
     
-    st.write(f'# Aki érvel: {ki_ervel_nev}')
-    st.write(topic_message)
-    if extra_task_message != "":
-        st.write(f'## {extra_task_message}')
-    st.write(hogyan_message)
+    st.write(f'# *Aki érvel:* {ki_ervel_nev}')
+    st.write(f'# {topic_message}')
+    if retorikai_feladat != "":
+        st.write(f'# {retorikai_feladat}')
+    st.write(f'# {hogyan_message}')
     
     # Generálás csak egyszer
     if "ai_answer_generated" not in st.session_state:
         prompt = generate_prompt(
             tema=topic_message, 
-            utasitas=extra_task_message,
+            retorikai_feladat=retorikai_feladat,
             erveles_iranya=hogyan_message,
             politikai_oldal=politikai_oldal,
             ido=seconds,
-            debug=False
+            debug=debug
         )
 
         # answer = "This is the answer"
-        answer = get_answer(prompt)
+        if debug:
+            answer = "This is the answer"
+        else:
+            answer = get_answer(prompt)
         
         st.session_state.ai_answer = answer
         st.session_state.ai_answer_generated = True
             # NE LEGYEN ITT st.rerun()!
     
     # Válasz megjelenítése (már van session_state-ben)
-    st.markdown(f"# {st.session_state.ai_answer}")
+    st.markdown(f"# A beszéd: \n\n # {st.session_state.ai_answer}")
     
     # Gomb ami bezárja
     if st.button("Elolvastuk", key="ai_done"):
