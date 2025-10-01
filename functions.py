@@ -309,7 +309,7 @@ def get_query_param(key, return_type="str"):
             return value
     except KeyError:
         if return_type == "str":
-            return "_"
+            return ""
         elif return_type == "bool":
             return False
         else:

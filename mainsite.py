@@ -142,6 +142,7 @@ def init_variables():
         st.session_state.get_random_text = False
         st.session_state.get_random_text_chance = 100
         st.session_state.jatek_gep_ellen = False
+        st.session_state.player_1_view_state = "Jobbos"
         try:
             del st.session_state["ai_answer_generated"]
         except Exception:
@@ -287,7 +288,7 @@ def main():
             )
         
         current_rounds = get_query_param("rounds")
-        if current_rounds == "_":
+        if current_rounds == "":
             current_rounds = 1
         else:
             current_rounds = int(current_rounds)
@@ -378,7 +379,7 @@ def main():
         set_query_param("player_2_points", 0)
         st.session_state.player_2_points = 0
 
-        if st.button("Játék indítása"):
+        if st.button("Játék indítása", disabled=True if st.session_state.player_1_name == "" or st.session_state.player_2_name == "" else False):
             st.session_state.new_game = False
             set_query_param("page", "game")
             st.session_state._init_game = True
