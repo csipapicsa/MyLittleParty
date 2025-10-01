@@ -5,6 +5,13 @@ import random
 from itertools import product
 from functions_ai import generate_prompt, get_answer
 
+
+def remove_leading_and_ending_space(text: str):
+    try:
+        return text.strip()
+    except Exception:
+        return text
+
 def disable_scrolling():
     """
     Disable scrolling on mobile device. Tested on Android. 
@@ -259,8 +266,8 @@ def run_timer_ai(seconds: int,
             debug=False
         )
 
-        # answer = "This is the answer"
-        answer = get_answer(prompt)
+        answer = "This is the answer"
+        # answer = get_answer(prompt)
         
         st.session_state.ai_answer = answer
         st.session_state.ai_answer_generated = True

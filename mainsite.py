@@ -1,6 +1,6 @@
 import streamlit as st
 
-from functions import get_query_param, set_query_param, read_in_cards, show_all_cards, read_in_versions, disable_scrolling, get_and_generate_all_guide_cards
+from functions import get_query_param, set_query_param, read_in_cards, show_all_cards, read_in_versions, disable_scrolling, get_and_generate_all_guide_cards, remove_leading_and_ending_space
 from pages import game_logic
 from time import sleep
 import random
@@ -220,6 +220,7 @@ def main():
         
         with cm1:
             játékos_1_neve = st.text_input("Játékos 1 neve", value=get_query_param("player_1_name"))
+            játékos_1_neve = remove_leading_and_ending_space(játékos_1_neve)
             
             # Initialize session state only once
             if "player_1_view_state" not in st.session_state:
@@ -255,6 +256,7 @@ def main():
 
         with cm2:
             játékos_2_neve = st.text_input("Játékos 2 neve", value=get_query_param("player_2_name"))
+            játékos_2_neve = remove_leading_and_ending_space(játékos_2_neve)
             ellen_index = 1 - options.index(st.session_state.player_1_view_state)
             key2 = f"player_2_view_selectbox_{ellen_index}"
             játékos_2_politikai_nézete = st.selectbox(
