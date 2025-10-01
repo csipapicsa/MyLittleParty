@@ -132,7 +132,7 @@ def run_timer(seconds: int, message: str):
     for secs in range(seconds, 0, -1):
         mm, ss = secs // 60, secs % 60
         mes.write(message)
-        ph.metric(label="", value=f"{mm:02d}:{ss:02d}")
+        ph.metric(label="idő", value=f"{mm:02d}:{ss:02d}", label_visibility="hidden")
         time.sleep(1)
 
     ph.metric(label="⏰ Letelt", value="00:00")
