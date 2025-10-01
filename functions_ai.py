@@ -1,4 +1,6 @@
-from google import genai
+# from google import genai
+import google.generativeai as genai
+
 import streamlit as st
 
 def get_answer(prompt):
