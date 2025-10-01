@@ -290,6 +290,8 @@ def main():
 
         st.session_state.erveles_time = st.select_slider(label="Hány másodpercig akartok érvelni?",
                                                          options=[15, 30, 45, 60])
+        
+        set_query_param("erveles_time", st.session_state.erveles_time)
 
         # Detect change
 
