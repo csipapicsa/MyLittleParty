@@ -89,6 +89,7 @@ def game_logic():
     cbal, cjobb = st.columns(2)
 
     SECONDS = st.session_state.get("erveles_time", 15)
+    SECONDS = 1
 
     if random.randint(0, 100) <= st.session_state.get_random_text_chance:
         st.session_state.get_random_text_chance
@@ -137,8 +138,8 @@ def game_logic():
         disable_button = not has_everyone_argued_this_round()
         if st.button("Szavazatok rögzítése", key=f"commit_votes{round_key_suffix}", disabled = disable_button):
 
-            _temp_pont_1 = szavazatok_player_1 * jobbos_bonus
-            _temp_pont_2 = szavazatok_player_2 * balos_bonus
+            _temp_pont_1 = szavazatok_player_1 * st.session_state.player_1_bonus
+            _temp_pont_2 = szavazatok_player_2 * st.session_state.player_2_bonus
             _current_player_1_points = get_query_param("player_1_points")
             _current_player_2_points = get_query_param("player_2_points")
             set_query_param("player_1_points", int(_current_player_1_points) + int(_temp_pont_1))

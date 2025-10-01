@@ -148,6 +148,8 @@ def init_variables():
         except Exception:
             pass
 
+        st.session_state.erveles_time = 15
+
 
 def scroll_to_top():
     """Függvény az oldal tetejére való ugráshoz"""
@@ -307,11 +309,17 @@ def main():
             set_query_param("rounds", new_value)
             st.rerun()  # <- required for immediate effect
 
-
-        st.session_state.erveles_time = st.select_slider(label="Hány másodpercig akartok érvelni?",
-                                                         options=[15, 30, 45, 60])
+        # st.info(current_val)
+        erveles_time = st.select_slider(label="Hány másodpercig akartok érvelni?",
+                                                         options=[15, 30, 45, 60], 
+                                                         value=st.session_state.erveles_time)
         
-        set_query_param("erveles_time", st.session_state.erveles_time)
+        
+        if erveles_time != st.session_state.erveles_time:
+            st.session_state.erveles_time = erveles_time
+            set_query_param("erveles_time", erveles_time)
+            st.rerun()
+            
 
         # Detect change
 
