@@ -3,6 +3,9 @@ from google import genai
 
 import streamlit as st
 
+# import google.generativeai as genai
+
+
 def get_answer(prompt):
     try:
         with st.spinner("# Gondolkodok nagyon, kb 10 másodperc..."):
@@ -13,7 +16,7 @@ def get_answer(prompt):
             )
         return response.text
     except Exception as e:
-        st.error(f" Valami baj van, egész pontosan ez? \n\n {e}")
+        st.error(f" Valami baj van, egész pontosan ez: \n\n {e}")
         return "Hát erre most nem tudok mit mondani. Elfogytak a szavak more."
 
 def generate_prompt(tema, utasitas, erveles_iranya, politikai_oldal, ido, debug=False):
