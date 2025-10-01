@@ -266,8 +266,8 @@ def run_timer_ai(seconds: int,
             debug=False
         )
 
-        answer = "This is the answer"
-        # answer = get_answer(prompt)
+        # answer = "This is the answer"
+        answer = get_answer(prompt)
         
         st.session_state.ai_answer = answer
         st.session_state.ai_answer_generated = True
