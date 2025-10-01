@@ -122,6 +122,23 @@ def clock_timer(SECONDS):
 
     return True
 
+
+# 2025-10-01: Új időzítő, mert jobb
+@st.dialog("⏳ Érvelés ideje", dismissible=False, width="small")
+def run_timer(seconds: int, message: str):
+    mes = st.empty()   # for dynamic text
+    ph = st.empty()    # for the timer
+
+    for secs in range(seconds, 0, -1):
+        mm, ss = secs // 60, secs % 60
+        mes.write(message)
+        ph.metric(label="", value=f"{mm:02d}:{ss:02d}")
+        time.sleep(1)
+
+    ph.metric(label="⏰ Letelt", value="00:00")
+    st.session_state.times_up = True
+    st.rerun()
+
 def read_in_versions():
     # readin versions.txt content line by line and write it
     with open("versions.txt", "r", encoding="utf-8") as file:

@@ -1,5 +1,5 @@
 import streamlit as st
-from functions import get_query_param, set_query_param, disable_scrolling, get_a_card, clock_timer
+from functions import get_query_param, set_query_param, disable_scrolling, get_a_card, clock_timer, run_timer
 import time
 
 @st.fragment
@@ -37,6 +37,7 @@ def game_logic():
     st.markdown(f"###### Kör {st.session_state.rounds_current} / {st.session_state.rounds}")
     st.markdown(f"###### **Téma:** *{st.session_state.current_card['Kártya leírás HUN']}*") # type: ignore
     st.markdown(f"###### Érveljetek  {hogyan}! ")
+    timer_message = f"# **Téma:** *{st.session_state.current_card['Kártya leírás HUN']}* \n\n # Érvelj  {hogyan}! "
 
     c1, c2 = st.columns(2)
 
@@ -77,30 +78,18 @@ def game_logic():
     st.markdown(f"**{_player_1_name}** ({st.session_state.player_1_view}): {_player_1_points} pont / **{_player_2_name}** ({st.session_state.player_2_view}): {_player_2_points} pont")
 
     # st.balloons()
+    # Default timer setup
+    if "times_up" not in st.session_state:
+        st.session_state.times_up = False
 
     cbal, cjobb = st.columns(2)
 
     SECONDS = st.session_state.get("erveles_time", 30)
 
     with cbal:
-
-        # timer_info = st.empty()
-
         if st.button(f"Érvelés tájmer ({SECONDS} mp) indítása"):
-            # from functions import clock_timer
-            # timer_info.info("Időzítő fut...")
-            st.session_state.times_up = clock_timer(SECONDS)
-
-        if st.session_state.times_up:
-            # st.success("Lejárt az idő. Rögzítsétek a szavazatokat!")
-            st.session_state.times_up = False
-            st.session_state.allow_record_votes = True
-            # timer_info.info("Lejárt az idő. Rögzítsétek a szavazatokat!")
-
-        else:
-            pass
-            # st.session_state.allow_record_votes = False    
-            # timer_info.info("Indítsd el az időzítőt, ha szeretnétek időre érvelni!")
+            st.session_state.times_up = False  # Reset timer flag
+            run_timer(SECONDS, timer_message)      # Open the dialog
 
     with cjobb:
 
