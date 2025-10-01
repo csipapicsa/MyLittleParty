@@ -27,41 +27,6 @@ vagy küldd el e-mailben: **gergo.pont.gyori.pont.project[kukac]gmail.com**
 )
 
 
-components.html("""
-    <div style="text-align:center; font-size:18px; margin-top:10px;">
-        📄 Page loaded!
-    </div>
-
-    <script>
-        console.log("✅ Custom JS loaded.");
-
-        document.addEventListener('touchmove', function(e) {
-            console.log("📱 Touchmove detected", e);
-        }, { passive: false });
-
-        window.addEventListener('scroll', function() {
-            console.log("🔄 Scroll event detected.");
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log("📄 DOMContentLoaded!");
-        });
-
-        // Try to modify overscroll behavior
-        const style = document.createElement('style');
-        style.innerHTML = `
-            html, body {
-                overscroll-behavior: none !important;
-                touch-action: none !important;
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
-""", height=50)
-
-
-
-
 
 szabaly = """
 ### 🎲 Az én kicsi pártom – Játékszabályok
