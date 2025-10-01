@@ -278,7 +278,10 @@ def run_timer_ai(seconds: int,
             # NE LEGYEN ITT st.rerun()!
     
     # Válasz megjelenítése (már van session_state-ben)
-    st.markdown(f"# A beszéd: \n\n # {st.session_state.ai_answer}")
+    lines = st.session_state.ai_answer.split('\n')
+    formatted_lines = ['# ' + line if line.strip() else '' for line in lines]
+    answer_with_hashes = '\n'.join(formatted_lines)
+    st.markdown(f"# A beszéd: \n\n {answer_with_hashes}")
     
     # Gomb ami bezárja
     if st.button("Elolvastuk", key="ai_done"):

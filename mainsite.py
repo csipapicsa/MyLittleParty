@@ -391,10 +391,17 @@ def main():
             st.session_state.new_game = False
             set_query_param("page", "game")
             st.session_state._init_game = True
+            st.session_state.round_current = 1
+            set_query_param("rounds_current", 1)
             try:
                 del st.session_state.current_card
             except Exception:
                 pass
+            try:
+                del st.session_state.speakers_this_round
+            except Exception:
+                pass
+
             st.rerun()
 
     elif new_page == "game":
