@@ -11,7 +11,7 @@ szabaly = """
 ### 🎲 Az én kicsi pártom – Játékszabályok
 
 **Leírás**  
-Ez egy minimum három fővel játszható, tervezés alatt álló kártyajáték online verziója, amely a politikai nézetek és érvek játékos ütköztetésére épül. A játék során egy képzeletbeli jobbos vagy balos párt politikusának bőrébe bújva kampánytémákat húztok, és azok mellett vagy ellen kell érvelnetek – néha még a saját vagy választott politikai meggyőződésetekkel szembemenve is.
+Ez egy minimum két fővel játszható, tervezés alatt álló kártyajáték online verziója, amely a politikai nézetek és érvek játékos ütköztetésére épül. A játék során egy képzeletbeli jobbos vagy balos párt politikusának bőrébe bújva kampánytémákat húztok, és azok mellett vagy ellen kell érvelnetek – néha még a saját vagy választott politikai meggyőződésetekkel szembemenve is.
 
 **Cél**  
 Gyűjtsd a legtöbb szavazatot érveid meggyőző erejével! Aki a legtöbb pontot szerzi a játék végére, megnyeri a választásokat.
@@ -28,7 +28,7 @@ Gyűjtsd a legtöbb szavazatot érveid meggyőző erejével! Aki a legtöbb pont
 **AI ellenfél mód (minimum 2 fő):**
 - Egy emberi játékos egy politikai oldalt képvisel
 - A **mesterséges intelligencia** lesz az ellenfél (másik politikai oldal)
-- Legalább 1 szavazó szükséges a pontok eldöntéséhez
+- Legalább 1 szavazó játékos szükséges a pontok eldöntéséhez
 - Az AI automatikusan generál érvelést minden témához
 
 ---
@@ -122,9 +122,6 @@ vagy küldd el e-mailben: **gergo.pont.gyori.pont.project[kukac]gmail.com**
         """
     }
 )
-
-
-
 
 
 def init_variables():
@@ -233,6 +230,7 @@ def main():
     # Content logic
     if new_page == "szabaly":
         read_in_versions()
+        # st.image("img/cover.png", caption="Az én kicsi pártom", width=400)
         st.markdown(szabaly)
     elif new_page == "settings":
         st.markdown("#### Beállítások")

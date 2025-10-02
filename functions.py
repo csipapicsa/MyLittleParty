@@ -182,7 +182,7 @@ def run_timer_human(seconds: int,
 
     hogyan_ph.write(f'# {hogyan_message}')
     
-    if st.button("Lökheted", key="start_button", disabled=False):
+    if st.button("Indulhat a kampánybeszéd", key="start_button", disabled=False):
         for secs in range(seconds, 0, -1):
             mm, ss = secs // 60, secs % 60
             timer_ph.metric(label="idő", value=f"{mm:02d}:{ss:02d}", label_visibility="hidden")
